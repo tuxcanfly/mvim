@@ -47,9 +47,6 @@ vim.api.nvim_create_autocmd("TermClose", {
 
 require("lazy").setup({
     {
-        "nvim-tree/nvim-web-devicons"
-    },
-    {
       "echasnovski/mini.nvim",
       version = false,
       config = function()
