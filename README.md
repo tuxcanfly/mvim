@@ -1,7 +1,8 @@
 # MVIM
 
 This is my NeoVim Configuration based entirely on [mini.nvim](https://github.com/echasnovski/mini.nvim)
-I guess [lazy.nvim](https://github.com/folke/lazy.nvim) too, if we're being honest. It's just more convenient than manualy Updating.
+
+And [lazy.nvim](https://github.com/folke/lazy.nvim). It's just more convenient than manualy Updating.
 
 ![Dashboard](screenshot_dashboard.png)
 ![Code](screenshot.png)
