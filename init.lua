@@ -16,6 +16,7 @@ vim.opt.smartindent = true
 vim.opt.shiftwidth = 4
 vim.opt.tabstop = 4
 vim.opt.expandtab = true
+vim.opt.relativenumber = true
 
 vim.filetype.add({
   filename = {
@@ -26,6 +27,12 @@ vim.filetype.add({
 require("lazy").setup({
     {
         "nvim-tree/nvim-web-devicons"
+    },
+    {
+        "ellisonleao/gruvbox.nvim",
+        config = function()
+          vim.cmd.colorscheme "gruvbox"
+        end
     },
     {
       "echasnovski/mini.nvim",
@@ -100,11 +107,4 @@ require("lazy").setup({
           }, { prefix = "<leader>" })
       end
     },
-    {
-    "catppuccin/nvim",
-    name = "catppuccin",
-    config = function()
-      vim.cmd.colorscheme "catppuccin-mocha"
-    end
-    }
 })
