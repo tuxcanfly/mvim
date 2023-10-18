@@ -1,6 +1,16 @@
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 local keymap = vim.api.nvim_set_keymap
 local default_opts = { noremap = true, silent = true }
+local win_config = function()
+    height = math.floor(0.618 * vim.o.lines)
+    width = math.floor(0.618 * vim.o.columns)
+    return {
+        anchor = 'NW', height = height, width = width,
+        row = math.floor(0.5 * (vim.o.lines - height)),
+        col = math.floor(0.5 * (vim.o.columns - width)),
+        border = 'none',
+    }
+end
 
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -21,17 +31,23 @@ vim.opt.shiftwidth = 4
 vim.opt.tabstop = 4
 vim.opt.expandtab = true
 vim.opt.relativenumber = true
+vim.opt.scrolloff = 10
 
 keymap("n", "<leader>ff", "<cmd>lua MiniPick.builtin.files()<cr>", { noremap = true, silent = true , desc = 'Find File'})
 keymap("n", "<leader>fm", "<cmd>lua MiniFiles.open()<cr>", { noremap = true, silent = true , desc = 'Find Manualy'})
 keymap("n", "<leader>fb", "<cmd>lua MiniPick.builtin.buffers()<cr>", { noremap = true, silent = true , desc = 'Find Buffer'})
 keymap("n", "<leader>fs", "<cmd>lua MiniPick.builtin.grep_live()<cr>", { noremap = true, silent = true , desc = 'Find String'})
+keymap("n", "<leader>fh", "<cmd>lua MiniPick.builtin.help()<cr>", { noremap = true, silent = true , desc = 'Find Help'})
 
 keymap("n", "<leader>ss", "<cmd>lua MiniSessions.select()<cr>", { noremap = true, silent = true , desc = 'Switch Session'})
 
 keymap("n", "<leader>bd", "<cmd>bd<cr>", { noremap = true, silent = true , desc = 'Close Buffer'})
 
 keymap("n", "<leader>gg", "<cmd>terminal lazygit<cr>", { noremap = true, silent = true , desc = 'Lazygit'})
+keymap("n", "<leader>gp", "<cmd>terminal git pull<cr>", { noremap = true, silent = true , desc = 'Git Push'})
+keymap("n", "<leader>gs", "<cmd>terminal git push<cr>", { noremap = true, silent = true , desc = 'Git Pull'})
+keymap("n", "<leader>ga", "<cmd>terminal git add .<cr>", { noremap = true, silent = true , desc = 'Git Add All'})
+keymap("n", "<leader>gc", '<cmd>terminal git commit -m "Autocommit from MVIM"<cr>', { noremap = true, silent = true , desc = 'Git Autocommit'})
 
 vim.filetype.add({
   filename = {
@@ -51,16 +67,19 @@ require("lazy").setup({
       version = false,
       config = function()
         require('mini.statusline').setup({
-            user_icons = false
+            -- We don't use an icon plugin
+            use_icons = false
         })
-        require('mini.animate').setup({
-            cursor = {
-                timing = function() return 3 end,
-            },
+        local animate = require('mini.animate')
+        animate.setup {
             scroll = {
-              enable = false,
+                -- Disable Scroll Animations, as the can interfer with mouse Scrolling
+                enable = false,
             },
-        })
+            cursor = {
+                timing = animate.gen_timing.cubic({ duration = 50, unit = 'total' })
+            },
+        }
         require('mini.basics').setup({
           options = {
               extra_ui = true,
@@ -152,6 +171,9 @@ require("lazy").setup({
         require('mini.pick').setup({
             options = {
                 use_cache = true
+            },
+            window = {
+                config = win_config,
             }
         })
         require('mini.sessions').setup({
