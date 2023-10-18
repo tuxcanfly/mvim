@@ -32,6 +32,7 @@ vim.opt.tabstop = 4
 vim.opt.expandtab = true
 vim.opt.relativenumber = true
 vim.opt.scrolloff = 10
+vim.opt.clipboard = unnamedplus
 
 keymap("n", "<leader>ff", "<cmd>lua MiniPick.builtin.files()<cr>", { noremap = true, silent = true , desc = 'Find File'})
 keymap("n", "<leader>fm", "<cmd>lua MiniFiles.open()<cr>", { noremap = true, silent = true , desc = 'Find Manualy'})
@@ -62,6 +63,7 @@ vim.api.nvim_create_autocmd("TermClose", {
 })
 
 require("lazy").setup({
+    {'equalsraf/neovim-gui-shim'},
     {
       "echasnovski/mini.nvim",
       version = false,
@@ -171,6 +173,9 @@ require("lazy").setup({
         })
         require('mini.pairs').setup()
         require('mini.pick').setup({
+            mappings = {
+                choose_in_vsplit  = '<C-CR>',
+            },
             options = {
                 use_cache = true
             },
