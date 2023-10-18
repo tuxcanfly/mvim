@@ -50,11 +50,16 @@ require("lazy").setup({
       "echasnovski/mini.nvim",
       version = false,
       config = function()
-        require('mini.statusline').setup()
+        require('mini.statusline').setup({
+            user_icons = false
+        })
         require('mini.animate').setup({
-          scroll = {
+            cursor = {
+                timing = function() return 3 end,
+            },
+            scroll = {
               enable = false,
-          }
+            },
         })
         require('mini.basics').setup({
           options = {
