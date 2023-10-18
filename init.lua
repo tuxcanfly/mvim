@@ -90,7 +90,7 @@ require("lazy").setup({
           }
         })
         require('mini.base16').setup({
-            palette = { 
+            palette = {
                 base00 = '#1d2021',
                 base01 = '#3c3836',
                 base02 = '#504945',
@@ -111,6 +111,8 @@ require("lazy").setup({
         })
         require('mini.comment').setup()
         require('mini.completion').setup()
+        require('mini.trailspace').setup()
+        require('mini.fuzzy').setup()
         require('mini.clue').setup({
             triggers = {
             -- Leader triggers
