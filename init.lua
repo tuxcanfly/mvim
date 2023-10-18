@@ -32,7 +32,7 @@ vim.opt.tabstop = 4
 vim.opt.expandtab = true
 vim.opt.relativenumber = true
 vim.opt.scrolloff = 10
-vim.opt.clipboard = unnamedplus
+vim.opt.clipboard = "unnamed,unnamedplus"
 
 keymap("n", "<leader>ff", "<cmd>lua MiniPick.builtin.files()<cr>", { noremap = true, silent = true , desc = 'Find File'})
 keymap("n", "<leader>fm", "<cmd>lua MiniFiles.open()<cr>", { noremap = true, silent = true , desc = 'Find Manualy'})
