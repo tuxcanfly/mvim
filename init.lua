@@ -1,6 +1,5 @@
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 local keymap = vim.api.nvim_set_keymap
-local default_opts = { noremap = true, silent = true }
 local win_config = function()
     height = math.floor(0.618 * vim.o.lines)
     width = math.floor(0.618 * vim.o.columns)
@@ -11,6 +10,44 @@ local win_config = function()
         border = 'none',
     }
 end
+
+local gruvbox_palette = {
+    base00 = '#1d2021',
+    base01 = '#3c3836',
+    base02 = '#504945',
+    base03 = '#665c54',
+    base04 = '#bdae93',
+    base05 = '#d5c4a1',
+    base06 = '#ebdbb2',
+    base07 = '#fbf1c7',
+    base08 = '#fb4934',
+    base09 = '#fe8019',
+    base0A = '#fabd2f',
+    base0B = '#b8bb26',
+    base0C = '#8ec07c',
+    base0D = '#83a598',
+    base0E = '#d3869b',
+    base0F = '#d65d0e',
+}
+
+local domsch_palette = {
+    base00 = '#202428',
+    base01 = '#303030',
+    base02 = '#404040',
+    base03 = '#606060',
+    base04 = '#b8b8b8',
+    base05 = '#d8d8d8',
+    base06 = '#e8e8e8',
+    base07 = '#ffffff',
+    base08 = '#ff3d3d',
+    base09 = '#ffaa3d',
+    base0A = '#ffff3d',
+    base0B = '#aaff3d',
+    base0C = '#3daaff',
+    base0D = '#3daaaa',
+    base0E = '#d399ff',
+    base0F = '#ffaaaa'
+}
 
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -39,6 +76,8 @@ keymap("n", "<leader>fm", "<cmd>lua MiniFiles.open()<cr>", { noremap = true, sil
 keymap("n", "<leader>fb", "<cmd>lua MiniPick.builtin.buffers()<cr>", { noremap = true, silent = true , desc = 'Find Buffer'})
 keymap("n", "<leader>fs", "<cmd>lua MiniPick.builtin.grep_live()<cr>", { noremap = true, silent = true , desc = 'Find String'})
 keymap("n", "<leader>fh", "<cmd>lua MiniPick.builtin.help()<cr>", { noremap = true, silent = true , desc = 'Find Help'})
+
+keymap("n", "<leader>tm", "<cmd>lua MiniMap.open()<cr>", { noremap = true, silent = true , desc = 'Mini Map'})
 
 keymap("n", "<leader>ss", "<cmd>lua MiniSessions.select()<cr>", { noremap = true, silent = true , desc = 'Switch Session'})
 
@@ -92,40 +131,7 @@ require("lazy").setup({
           }
         })
         require('mini.base16').setup({
-            palette = {
-                base00 = '#202428',
-                base01 = '#303030',
-                base02 = '#404040',
-                base03 = '#606060',
-                base04 = '#b8b8b8',
-                base05 = '#d8d8d8',
-                base06 = '#e8e8e8',
-                base07 = '#ffffff',
-                base08 = '#ff3d3d',
-                base09 = '#ffaa3d',
-                base0A = '#ffff3d',
-                base0B = '#aaff3d',
-                base0C = '#3daaff',
-                base0D = '#3daaaa',
-                base0E = '#d399ff',
-                base0F = '#ffaaaa'
-                -- base00 = '#1d2021',
-                -- base01 = '#3c3836',
-                -- base02 = '#504945',
-                -- base03 = '#665c54',
-                -- base04 = '#bdae93',
-                -- base05 = '#d5c4a1',
-                -- base06 = '#ebdbb2',
-                -- base07 = '#fbf1c7',
-                -- base08 = '#fb4934',
-                -- base09 = '#fe8019',
-                -- base0A = '#fabd2f',
-                -- base0B = '#b8bb26',
-                -- base0C = '#8ec07c',
-                -- base0D = '#83a598',
-                -- base0E = '#d3869b',
-                -- base0F = '#d65d0e',
-            }
+            palette = domsch_palette
         })
         require('mini.comment').setup()
         require('mini.completion').setup()
@@ -181,6 +187,7 @@ require("lazy").setup({
         })
         require('mini.files').setup()
         require('mini.move').setup()
+        require('mini.map').setup()
         require('mini.indentscope').setup({
           draw = {
               animation = function(s, n) return 5 end,
