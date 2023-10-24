@@ -11,62 +11,6 @@ local win_config = function()
     }
 end
 
-local gruvbox_palette = {
-    base00 = '#1d2021',
-    base01 = '#3c3836',
-    base02 = '#504945',
-    base03 = '#665c54',
-    base04 = '#bdae93',
-    base05 = '#d5c4a1',
-    base06 = '#ebdbb2',
-    base07 = '#fbf1c7',
-    base08 = '#fb4934',
-    base09 = '#fe8019',
-    base0A = '#fabd2f',
-    base0B = '#b8bb26',
-    base0C = '#8ec07c',
-    base0D = '#83a598',
-    base0E = '#d3869b',
-    base0F = '#d65d0e',
-}
-
-local domsch_palette = {
-    base00 = '#202428',
-    base01 = '#303438',
-    base02 = '#404448',
-    base03 = '#606468',
-    base04 = '#b0b4b8',
-    base05 = '#d0d4d8',
-    base06 = '#e0e4e8',
-    base07 = '#ffffff',
-    base08 = '#ff3d3d',
-    base09 = '#ffaa3d',
-    base0A = '#ffff3d',
-    base0B = '#aaff3d',
-    base0C = '#3daaff',
-    base0D = '#3dddaa',
-    base0E = '#d399ff',
-    base0F = '#ffaaaa'
-}
-
-local domsch_light_palette = {
-    base00 = '#f0f4f8',
-    base01 = '#e0e4e8',
-    base02 = '#d0d4d8',
-    base03 = '#b0b4b8',
-    base04 = '#505458',
-    base05 = '#404448',
-    base06 = '#303438',
-    base07 = '#202428',
-    base08 = '#d30000',
-    base09 = '#f37c22',
-    base0A = '#88aa00',
-    base0B = '#147624',
-    base0C = '#006bbd',
-    base0D = '#157a5a',
-    base0E = '#9c1aff',
-    base0F = '#b64422',
-}
 
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -81,6 +25,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 vim.g.mapleader = " "
+vim.o.background = 'dark'
 vim.opt.listchars = { extends='.',precedes='|',nbsp='_', tab='└─┘' }
 vim.opt.smartindent = true
 vim.opt.shiftwidth = 4
@@ -89,6 +34,7 @@ vim.opt.expandtab = true
 vim.opt.relativenumber = true
 vim.opt.scrolloff = 10
 vim.opt.clipboard = "unnamed,unnamedplus"
+vim.opt.statuscolumn = '%=%{v:lnum}│%{v:relnum}'
 
 keymap("n", "<leader>ff", "<cmd>lua MiniPick.builtin.files()<cr>", { noremap = true, silent = true , desc = 'Find File'})
 keymap("n", "<leader>fm", "<cmd>lua MiniFiles.open()<cr>", { noremap = true, silent = true , desc = 'Find Manualy'})
@@ -109,6 +55,9 @@ keymap("n", "<leader>gp", "<cmd>terminal git pull<cr>", { noremap = true, silent
 keymap("n", "<leader>gs", "<cmd>terminal git push<cr>", { noremap = true, silent = true , desc = 'Git Pull'})
 keymap("n", "<leader>ga", "<cmd>terminal git add .<cr>", { noremap = true, silent = true , desc = 'Git Add All'})
 keymap("n", "<leader>gc", '<cmd>terminal git commit -m "Autocommit from MVIM"<cr>', { noremap = true, silent = true , desc = 'Git Autocommit'})
+
+keymap("n", "<leader>ud", "<cmd>set background=dark<cr><cmd>colorscheme domscheme<cr>", { noremap = true, silent = true , desc = 'Dark Background'})
+keymap("n", "<leader>ul", "<cmd>set background=light<cr><cmd>colorscheme domscheme<cr>", { noremap = true, silent = true , desc = 'Light Backround'})
 
 vim.filetype.add({
   filename = {
@@ -151,11 +100,10 @@ require("lazy").setup({
               windows = true,
           }
         })
-        require('mini.base16').setup({
-            palette = domsch_light_palette
-        })
         require('mini.comment').setup()
         require('mini.completion').setup()
+        require('mini.colors').setup()
+        vim.cmd[[colorscheme domscheme]]
         require('mini.trailspace').setup()
         require('mini.fuzzy').setup()
         require('mini.clue').setup({
