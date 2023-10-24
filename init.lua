@@ -32,21 +32,40 @@ local gruvbox_palette = {
 
 local domsch_palette = {
     base00 = '#202428',
-    base01 = '#303030',
-    base02 = '#404040',
-    base03 = '#606060',
-    base04 = '#b8b8b8',
-    base05 = '#d8d8d8',
-    base06 = '#e8e8e8',
+    base01 = '#303438',
+    base02 = '#404448',
+    base03 = '#606468',
+    base04 = '#b0b4b8',
+    base05 = '#d0d4d8',
+    base06 = '#e0e4e8',
     base07 = '#ffffff',
     base08 = '#ff3d3d',
     base09 = '#ffaa3d',
     base0A = '#ffff3d',
     base0B = '#aaff3d',
     base0C = '#3daaff',
-    base0D = '#3daaaa',
+    base0D = '#3dddaa',
     base0E = '#d399ff',
     base0F = '#ffaaaa'
+}
+
+local domsch_light_palette = {
+    base00 = '#f0f4f8',
+    base01 = '#e0e4e8',
+    base02 = '#d0d4d8',
+    base03 = '#b0b4b8',
+    base04 = '#505458',
+    base05 = '#404448',
+    base06 = '#303438',
+    base07 = '#202428',
+    base08 = '#d30000',
+    base09 = '#f37c22',
+    base0A = '#88aa00',
+    base0B = '#147624',
+    base0C = '#006bbd',
+    base0D = '#157a5a',
+    base0E = '#9c1aff',
+    base0F = '#b64422',
 }
 
 if not vim.loop.fs_stat(lazypath) then
@@ -82,6 +101,8 @@ keymap("n", "<leader>tm", "<cmd>lua MiniMap.open()<cr>", { noremap = true, silen
 keymap("n", "<leader>ss", "<cmd>lua MiniSessions.select()<cr>", { noremap = true, silent = true , desc = 'Switch Session'})
 
 keymap("n", "<leader>bd", "<cmd>bd<cr>", { noremap = true, silent = true , desc = 'Close Buffer'})
+keymap("n", "<C-l>", "<cmd>bnext<cr>", { silent = true , desc = 'Next Buffer'})
+keymap("n", "<C-h>", "<cmd>bprevious<cr>", { silent = true , desc = 'Previous Buffer'})
 
 keymap("n", "<leader>gg", "<cmd>terminal lazygit<cr>", { noremap = true, silent = true , desc = 'Lazygit'})
 keymap("n", "<leader>gp", "<cmd>terminal git pull<cr>", { noremap = true, silent = true , desc = 'Git Push'})
@@ -131,7 +152,7 @@ require("lazy").setup({
           }
         })
         require('mini.base16').setup({
-            palette = domsch_palette
+            palette = domsch_light_palette
         })
         require('mini.comment').setup()
         require('mini.completion').setup()
