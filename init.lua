@@ -1,3 +1,4 @@
+local MvimFont = "RobotoMono Nerd Font"
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 local keymap = vim.api.nvim_set_keymap
 local win_config = function()
@@ -10,7 +11,6 @@ local win_config = function()
         border = 'none',
     }
 end
-
 
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -36,36 +36,49 @@ vim.opt.scrolloff = 10
 vim.opt.clipboard = "unnamed,unnamedplus"
 -- vim.opt.statuscolumn = '%=%{v:lnum}│%{v:relnum}'
 
+-- Finding Stuff
 keymap("n", "<leader>ff", "<cmd>lua MiniPick.builtin.files()<cr>", { noremap = true, silent = true , desc = 'Find File'})
 keymap("n", "<leader>fm", "<cmd>lua MiniFiles.open()<cr>", { noremap = true, silent = true , desc = 'Find Manualy'})
 keymap("n", "<leader>fb", "<cmd>lua MiniPick.builtin.buffers()<cr>", { noremap = true, silent = true , desc = 'Find Buffer'})
 keymap("n", "<leader>fs", "<cmd>lua MiniPick.builtin.grep_live()<cr>", { noremap = true, silent = true , desc = 'Find String'})
 keymap("n", "<leader>fh", "<cmd>lua MiniPick.builtin.help()<cr>", { noremap = true, silent = true , desc = 'Find Help'})
 
-keymap("n", "<leader>tm", "<cmd>lua MiniMap.open()<cr>", { noremap = true, silent = true , desc = 'Mini Map'})
-
+-- Session Related Keymaps
 keymap("n", "<leader>ss", "<cmd>lua MiniSessions.select()<cr>", { noremap = true, silent = true , desc = 'Switch Session'})
 keymap("n", "<leader>sw", "<cmd>lua MiniSessions.write()<cr>", { noremap = true, silent = true , desc = 'Save Session'})
 
+-- Buffer Related Keymaps
 keymap("n", "<leader>bd", "<cmd>bd<cr>", { noremap = true, silent = true , desc = 'Close Buffer'})
 keymap("n", "<C-l>", "<cmd>bnext<cr>", { silent = true , desc = 'Next Buffer'})
 keymap("n", "<C-h>", "<cmd>bprevious<cr>", { silent = true , desc = 'Previous Buffer'})
 
+-- Git Related Keymaps
 keymap("n", "<leader>gg", "<cmd>terminal lazygit<cr>", { noremap = true, silent = true , desc = 'Lazygit'})
 keymap("n", "<leader>gp", "<cmd>terminal git pull<cr>", { noremap = true, silent = true , desc = 'Git Push'})
 keymap("n", "<leader>gs", "<cmd>terminal git push<cr>", { noremap = true, silent = true , desc = 'Git Pull'})
 keymap("n", "<leader>ga", "<cmd>terminal git add .<cr>", { noremap = true, silent = true , desc = 'Git Add All'})
 keymap("n", "<leader>gc", '<cmd>terminal git commit -m "Autocommit from MVIM"<cr>', { noremap = true, silent = true , desc = 'Git Autocommit'})
 
+-- UI Related Keymaps
+-- Change Colorscheme
 keymap("n", "<leader>ud", "<cmd>set background=dark<cr>", { noremap = true, silent = true , desc = 'Dark Background'})
 keymap("n", "<leader>ul", "<cmd>set background=light<cr>", { noremap = true, silent = true , desc = 'Light Backround'})
+keymap("n", "<leader>um", "<cmd>lua MiniMap.open()<cr>", { noremap = true, silent = true , desc = 'Mini Map'})
 
+-- Font Size and "Presentation Mode"
+keymap("n", "<leader>uf1", "<cmd>GuiFont! "..MvimFont..":h10<cr>", { noremap = true, silent = true , desc = 'Font Size 10'})
+keymap("n", "<leader>uf2", "<cmd>GuiFont! "..MvimFont..":h12<cr>", { noremap = true, silent = true , desc = 'Font Size 12'})
+keymap("n", "<leader>uf3", "<cmd>GuiFont! "..MvimFont..":h14<cr>", { noremap = true, silent = true , desc = 'Font Size 14'})
+keymap("n", "<leader>ufp", "<cmd>GuiFont! "..MvimFont..":h20<cr>", { noremap = true, silent = true , desc = 'Font Size 20'})
+
+-- This should probably not go into the repo, as it's not universally usefull
 vim.filetype.add({
   filename = {
     ['inventory'] = 'dosini',
   }
 })
 
+-- Automatically close terminal Buffers when their Process is done
 vim.api.nvim_create_autocmd("TermClose", {
     callback = function()
        vim.cmd("bdelete")
