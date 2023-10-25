@@ -177,6 +177,7 @@ require("lazy").setup({
                 { mode = 'n', keys = '<Leader>s', desc = 'Switch' },
                 { mode = 'n', keys = '<Leader>b', desc = 'Buffer' },
                 { mode = 'n', keys = '<Leader>g', desc = 'Git' },
+                { mode = 'n', keys = '<Leader>u', desc = 'UI' },
                 function() MiniClue.gen_clues.g() end,
                 function() MiniClue.gen_clues.builtin_completion() end,
                 function() MiniClue.gen_clues.marks() end,
