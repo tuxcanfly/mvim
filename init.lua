@@ -12,6 +12,24 @@ local win_config = function()
     }
 end
 
+function increase_font()
+    local current_size = tonumber(string.match(vim.o.guifont, 'h(%d+)'))
+    if current_size then
+        local new_size = current_size + 1
+        vim.o.guifont = string.gsub(vim.o.guifont, 'h%d+', 'h' .. new_size)
+    end
+end
+
+function decrease_font()
+    local current_size = tonumber(string.match(vim.o.guifont, 'h(%d+)'))
+    if current_size then
+        local new_size = current_size - 1
+        if new_size >= 5 then -- To prevent the font size from becoming too small
+            vim.o.guifont = string.gsub(vim.o.guifont, 'h%d+', 'h' .. new_size)
+        end
+    end
+end
+
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
     "git",
@@ -70,6 +88,8 @@ keymap("n", "<leader>uf1", "<cmd>GuiFont! "..MvimFont..":h10<cr>", { noremap = t
 keymap("n", "<leader>uf2", "<cmd>GuiFont! "..MvimFont..":h12<cr>", { noremap = true, silent = true , desc = 'Font Size 12'})
 keymap("n", "<leader>uf3", "<cmd>GuiFont! "..MvimFont..":h14<cr>", { noremap = true, silent = true , desc = 'Font Size 14'})
 keymap("n", "<leader>ufp", "<cmd>GuiFont! "..MvimFont..":h20<cr>", { noremap = true, silent = true , desc = 'Font Size 20'})
+keymap("n", "<leader>ufk", ":lua increase_font()<CR>", { noremap = true, silent = true , desc = 'Increase Font Size'})
+keymap("n", "<leader>ufj", ":lua decrease_font()<CR>", { noremap = true, silent = true , desc = 'Decrease Font Size'})
 
 -- This should probably not go into the repo, as it's not universally usefull
 vim.filetype.add({
