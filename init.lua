@@ -34,7 +34,7 @@ vim.opt.expandtab = true
 vim.opt.relativenumber = true
 vim.opt.scrolloff = 10
 vim.opt.clipboard = "unnamed,unnamedplus"
-vim.opt.statuscolumn = '%=%{v:lnum}│%{v:relnum}'
+-- vim.opt.statuscolumn = '%=%{v:lnum}│%{v:relnum}'
 
 keymap("n", "<leader>ff", "<cmd>lua MiniPick.builtin.files()<cr>", { noremap = true, silent = true , desc = 'Find File'})
 keymap("n", "<leader>fm", "<cmd>lua MiniFiles.open()<cr>", { noremap = true, silent = true , desc = 'Find Manualy'})
@@ -45,6 +45,7 @@ keymap("n", "<leader>fh", "<cmd>lua MiniPick.builtin.help()<cr>", { noremap = tr
 keymap("n", "<leader>tm", "<cmd>lua MiniMap.open()<cr>", { noremap = true, silent = true , desc = 'Mini Map'})
 
 keymap("n", "<leader>ss", "<cmd>lua MiniSessions.select()<cr>", { noremap = true, silent = true , desc = 'Switch Session'})
+keymap("n", "<leader>sw", "<cmd>lua MiniSessions.write()<cr>", { noremap = true, silent = true , desc = 'Save Session'})
 
 keymap("n", "<leader>bd", "<cmd>bd<cr>", { noremap = true, silent = true , desc = 'Close Buffer'})
 keymap("n", "<C-l>", "<cmd>bnext<cr>", { silent = true , desc = 'Next Buffer'})
@@ -56,8 +57,8 @@ keymap("n", "<leader>gs", "<cmd>terminal git push<cr>", { noremap = true, silent
 keymap("n", "<leader>ga", "<cmd>terminal git add .<cr>", { noremap = true, silent = true , desc = 'Git Add All'})
 keymap("n", "<leader>gc", '<cmd>terminal git commit -m "Autocommit from MVIM"<cr>', { noremap = true, silent = true , desc = 'Git Autocommit'})
 
-keymap("n", "<leader>ud", "<cmd>set background=dark<cr><cmd>colorscheme domscheme<cr>", { noremap = true, silent = true , desc = 'Dark Background'})
-keymap("n", "<leader>ul", "<cmd>set background=light<cr><cmd>colorscheme domscheme<cr>", { noremap = true, silent = true , desc = 'Light Backround'})
+keymap("n", "<leader>ud", "<cmd>set background=dark<cr>", { noremap = true, silent = true , desc = 'Dark Background'})
+keymap("n", "<leader>ul", "<cmd>set background=light<cr>", { noremap = true, silent = true , desc = 'Light Backround'})
 
 vim.filetype.add({
   filename = {
@@ -77,9 +78,10 @@ require("lazy").setup({
       "echasnovski/mini.nvim",
       version = false,
       config = function()
+        require('mini.bracketed').setup()
         require('mini.statusline').setup({
             -- We don't use an icon plugin
-            use_icons = false
+            use_icons = true
         })
         local animate = require('mini.animate')
         animate.setup {
@@ -103,7 +105,6 @@ require("lazy").setup({
         require('mini.comment').setup()
         require('mini.completion').setup()
         require('mini.colors').setup()
-        vim.cmd[[colorscheme domscheme]]
         require('mini.trailspace').setup()
         require('mini.fuzzy').setup()
         require('mini.clue').setup({
@@ -179,10 +180,20 @@ require("lazy").setup({
             autowrite = true
         })
         require('mini.starter').setup({
-            header = "███╗   ███╗██╗   ██╗██╗███╗   ███╗\n████╗ ████║██║   ██║██║████╗ ████║\n██╔████╔██║██║   ██║██║██╔████╔██║\n██║╚██╔╝██║╚██╗ ██╔╝██║██║╚██╔╝██║\n██║ ╚═╝ ██║ ╚████╔╝ ██║██║ ╚═╝ ██║\n╚═╝     ╚═╝  ╚═══╝  ╚═╝╚═╝     ╚═╝\n                                  "
+            header = [[
+███╗   ███╗██╗   ██╗██╗███╗   ███╗
+████╗ ████║██║   ██║██║████╗ ████║
+██╔████╔██║██║   ██║██║██╔████╔██║
+██║╚██╔╝██║╚██╗ ██╔╝██║██║╚██╔╝██║
+██║ ╚═╝ ██║ ╚████╔╝ ██║██║ ╚═╝ ██║
+╚═╝     ╚═╝  ╚═══╝  ╚═╝╚═╝     ╚═╝]],
+            footer = [[
+Welcome to MVIM
+<C-c> closes this buffer]]
         })
         require('mini.surround').setup()
         require('mini.tabline').setup()
       end
     },
 })
+vim.cmd[[colorscheme domscheme]]

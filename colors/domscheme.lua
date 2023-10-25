@@ -91,5 +91,5 @@ end
 
 if palette then
   require('mini.base16').setup({ palette = palette, use_cterm = use_cterm })
-  vim.g.colors_name = 'minicyan'
+  vim.g.colors_name = 'domscheme'
 end
