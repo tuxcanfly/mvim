@@ -1,16 +1,16 @@
 local MvimFont = "RobotoMono Nerd Font"
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 local keymap = vim.api.nvim_set_keymap
-local win_config = function()
-    height = math.floor(0.618 * vim.o.lines)
-    width = math.floor(0.618 * vim.o.columns)
-    return {
-        anchor = 'NW', height = height, width = width,
-        row = math.floor(0.5 * (vim.o.lines - height)),
-        col = math.floor(0.5 * (vim.o.columns - width)),
-        border = 'none',
-    }
-end
+-- local win_config = function()
+--     height = math.floor(0.618 * vim.o.lines)
+--     width = math.floor(0.618 * vim.o.columns)
+--     return {
+--         anchor = 'NW', height = height, width = width,
+--         row = math.floor(0.5 * (vim.o.lines - height)),
+--         col = math.floor(0.5 * (vim.o.columns - width)),
+--         border = 'rounded',
+--     }
+-- end
 
 function increase_font()
     local current_size = tonumber(string.match(vim.o.guifont, 'h(%d+)'))
@@ -91,6 +91,10 @@ keymap("n", "<leader>ufp", "<cmd>GuiFont! "..MvimFont..":h20<cr>", { noremap = t
 keymap("n", "<leader>ufk", ":lua increase_font()<CR>", { noremap = true, silent = true , desc = 'Increase Font Size'})
 keymap("n", "<leader>ufj", ":lua decrease_font()<CR>", { noremap = true, silent = true , desc = 'Decrease Font Size'})
 
+-- Completion Navigaiont
+keymap('i', '<Down>',   [[pumvisible() ? "<C-o>j" : "\<Down>"]],   { expr = true, noremap = true })
+keymap('i', '<Up>', [[pumvisible() ? "<C-o>k" : "\<Up>"]], { expr = true , noremap = true})
+
 -- This should probably not go into the repo, as it's not universally usefull
 vim.filetype.add({
   filename = {
@@ -105,8 +109,20 @@ vim.api.nvim_create_autocmd("TermClose", {
     end
 })
 
+vim.api.nvim_create_autocmd('User', {
+    pattern = 'MiniFilesWindowOpen',
+    callback = function(args)
+    local win_id = args.data.win_id
+
+    -- Customize window-local settings
+    vim.wo[win_id].winblend = 10
+    vim.api.nvim_win_set_config(win_id, { border = 'rounded' })
+    end,
+})
+
 require("lazy").setup({
     {'equalsraf/neovim-gui-shim'},
+    {'mcchrish/zenbones.nvim'},
     {
       "echasnovski/mini.nvim",
       version = false,
@@ -136,7 +152,12 @@ require("lazy").setup({
           }
         })
         require('mini.comment').setup()
-        require('mini.completion').setup()
+        require('mini.completion').setup({
+            window = {
+                info = { border = 'rounded'},
+                signature = { border = 'rounded'},
+            }
+        })
         require('mini.colors').setup()
         require('mini.trailspace').setup()
         require('mini.fuzzy').setup()
@@ -177,7 +198,7 @@ require("lazy").setup({
                 { mode = 'n', keys = '<Leader>s', desc = 'Switch' },
                 { mode = 'n', keys = '<Leader>b', desc = 'Buffer' },
                 { mode = 'n', keys = '<Leader>g', desc = 'Git' },
-                { mode = 'n', keys = '<Leader>u', desc = 'UI' },
+                { mode = 'n', keys = '<Leader>u', desc = 'Git' },
                 function() MiniClue.gen_clues.g() end,
                 function() MiniClue.gen_clues.builtin_completion() end,
                 function() MiniClue.gen_clues.marks() end,
@@ -189,7 +210,11 @@ require("lazy").setup({
                 delay = 300
             }
         })
-        require('mini.files').setup()
+        require('mini.files').setup({
+            windows = {
+                preview = true,
+            }
+        })
         require('mini.move').setup()
         require('mini.map').setup()
         require('mini.indentscope').setup({
@@ -207,7 +232,9 @@ require("lazy").setup({
                 use_cache = true
             },
             window = {
-                config = win_config,
+                config = {
+                    border = 'rounded'
+                },
             }
         })
         require('mini.sessions').setup({
