@@ -122,7 +122,6 @@ vim.api.nvim_create_autocmd('User', {
 
 require("lazy").setup({
     {'equalsraf/neovim-gui-shim'},
-    {'mcchrish/zenbones.nvim'},
     {
       "echasnovski/mini.nvim",
       version = false,
@@ -257,4 +256,4 @@ Welcome to MVIM
       end
     },
 })
-vim.cmd[[colorscheme domscheme]]
+vim.cmd[[colorscheme catppuccin]]
