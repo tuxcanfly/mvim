@@ -1,6 +1,6 @@
 local MvimFont = "JetBrainsMono Nerd Font"
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-local keymap = vim.api.nvim_set_keymap
+local keymap = vim.keymap.set
 
 function increase_font()
     local current_size = tonumber(string.match(vim.o.guifont, 'h(%d+)'))
@@ -45,18 +45,42 @@ vim.opt.clipboard = "unnamed,unnamedplus"
 -- vim.opt.statuscolumn = '%=%{v:lnum}│%{v:relnum}'
 
 -- General Vim Things
-keymap("n", "<leader>qq", "<cmd>q<cr>", { noremap = true, silent = true, desc = 'Quit' })
+keymap("n", "<leader>wq", "<cmd>q<cr>", { noremap = true, silent = true, desc = 'Quit' })
 keymap("n", "<leader>ul", "<cmd>Lazy<cr>", { noremap = true, silent = true, desc = 'Lazy' })
 
 -- Finding Stuff
-keymap("n", "<leader>ff", "<cmd>lua MiniPick.builtin.files()<cr>", { noremap = true, silent = true, desc = 'Find File' })
-keymap("n", "<leader>fm", "<cmd>lua MiniFiles.open(vim.api.nvim_buf_get_name(0))<cr>",
+keymap("n", "<leader>fs", "<cmd>lua MiniPick.builtin.files()<cr>", { noremap = true, silent = true, desc = 'Find File' })
+keymap("n", "<leader>e", "<cmd>lua MiniFiles.open(vim.api.nvim_buf_get_name(0))<cr>",
     { noremap = true, silent = true, desc = 'Find Manualy' })
-keymap("n", "<leader>fb", "<cmd>lua MiniPick.builtin.buffers()<cr>",
+keymap("n", "<leader><space>", "<cmd>lua MiniPick.builtin.buffers()<cr>",
     { noremap = true, silent = true, desc = 'Find Buffer' })
 keymap("n", "<leader>fg", "<cmd>lua MiniPick.builtin.grep_live()<cr>",
     { noremap = true, silent = true, desc = 'Find String' })
 keymap("n", "<leader>fh", "<cmd>lua MiniPick.builtin.help()<cr>", { noremap = true, silent = true, desc = 'Find Help' })
+keymap("n", "<leader>fc", function()
+        local init_scheme = vim.g.colors_name
+        local new_scheme = require('mini.pick').start({
+            source = {
+                items = vim.fn.getcompletion("", "color"),
+                preview = function(_, item)
+                    pcall(vim.cmd, 'colorscheme ' .. item)
+                end,
+                choose = function(item)
+                    pcall(vim.cmd, 'colorscheme ' .. item)
+                end
+            },
+            mappings = {
+                preview = {
+                    char = '<C-p>',
+                    func = function()
+                        local item = require('mini.pick').get_picker_matches()
+                        pcall(vim.cmd, 'colorscheme ' .. item.current) end
+                }
+            }
+        })
+        if new_scheme == nil then pcall(vim.cmd, 'colorscheme ' .. init_scheme) end
+    end,
+    { noremap = true, silent = true, desc = 'Change Colorscheme' })
 
 -- Session Related Keymaps
 keymap("n", "<leader>ss", "<cmd>lua MiniSessions.select()<cr>",
@@ -111,6 +135,7 @@ keymap("n", "<leader>ufp", "<cmd>GuiFont! " .. MvimFont .. ":h20<cr>",
 keymap("n", "<leader>ufk", ":lua increase_font()<CR>", { noremap = true, silent = true, desc = 'Increase Font Size' })
 keymap("n", "<leader>ufj", ":lua decrease_font()<CR>", { noremap = true, silent = true, desc = 'Decrease Font Size' })
 
+
 -- Completion Navigaiont
 -- keymap('i', '<Down>', [[pumvisible() ? "<C-o>j" : "\<Down>"]], { expr = true, noremap = true })
 -- keymap('i', '<Up>', [[pumvisible() ? "<C-o>k" : "\<Up>"]], { expr = true, noremap = true })
@@ -141,7 +166,23 @@ vim.api.nvim_create_autocmd('User', {
 })
 
 require("lazy").setup({
-    { 'equalsraf/neovim-gui-shim' },
+    'equalsraf/neovim-gui-shim',
+    {
+        'craftzdog/solarized-osaka.nvim',
+        config = function()
+            require("solarized-osaka").setup({
+                transparent = false, -- Enable this to disable setting the background color
+            })
+        end
+    },
+    { "catppuccin/nvim",  name = "catppuccin", priority = 1000 },
+    'folke/tokyonight.nvim',
+    'nyoom-engineering/oxocarbon.nvim',
+    'navarasu/onedark.nvim',
+    'rebelot/kanagawa.nvim',
+    'sainnhe/everforest',
+    'kdheepak/monochrome.nvim',
+    { 'rose-pine/neovim', name = 'rose-pine' },
     {
         "echasnovski/mini.nvim",
         version = false,
@@ -213,7 +254,7 @@ require("lazy").setup({
                     delay = 300
                 }
             })
-            require('mini.colors').setup()
+            -- require('mini.colors').setup()
             require('mini.comment').setup()
             require('mini.completion').setup({
                 window = {
@@ -231,7 +272,7 @@ require("lazy").setup({
             })
             require('mini.fuzzy').setup()
             require('mini.hipatterns').setup()
-            require('mini.hues').setup({ background = '#282828', foreground = '#EBDBB2' })
+            -- require('mini.hues').setup({ background = '#282828', foreground = '#EBDBB2' })
             require('mini.indentscope').setup({
                 draw = {
                     animation = function(s, n) return 5 end,
@@ -401,3 +442,4 @@ require("lazy").setup({
         end
     }
 })
+vim.cmd('colorscheme kanagawa')
