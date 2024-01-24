@@ -1,0 +1,145 @@
+local MvimFont = "JetBrainsMono Nerd Font"
+local keymap = vim.keymap.set
+local MiniPick = require('mini.pick')
+local MiniFiles = require('mini.files')
+local MiniSessions = require('mini.sessions')
+local MiniExtra = require('mini.extra')
+
+function increase_font()
+    local current_size = tonumber(string.match(vim.o.guifont, 'h(%d+)'))
+    if current_size then
+        local new_size = current_size + 1
+        vim.o.guifont = string.gsub(vim.o.guifont, 'h%d+', 'h' .. new_size)
+    end
+end
+
+function decrease_font()
+    local current_size = tonumber(string.match(vim.o.guifont, 'h(%d+)'))
+    if current_size then
+        local new_size = current_size - 1
+        if new_size >= 5 then -- To prevent the font size from becoming too small
+            vim.o.guifont = string.gsub(vim.o.guifont, 'h%d+', 'h' .. new_size)
+        end
+    end
+end
+
+-- MiniPick Colorscheme Picker
+local set_colorscheme = function(name) pcall(vim.cmd, 'colorscheme ' .. name) end
+local pick_colorscheme = function()
+    local init_scheme = vim.g.colors_name
+    local new_scheme = MiniPick.start({
+        source = {
+            items = vim.fn.getcompletion("", "color"),
+            preview = function(_, item)
+                set_colorscheme(item)
+            end,
+            choose = set_colorscheme
+        },
+        mappings = {
+            preview = {
+                char = '<C-p>',
+                func = function()
+                    local item = MiniPick.get_picker_matches()
+                    pcall(vim.cmd, 'colorscheme ' .. item.current)
+                end
+            }
+        }
+    })
+    if new_scheme == nil then set_colorscheme(init_scheme) end
+end
+
+-- General Vim Things
+keymap("n", "<leader>wq", "<cmd>wqa<cr>", { noremap = true, silent = true, desc = 'Quit' })
+keymap("n", "<leader>ul", "<cmd>Lazy<cr>", { noremap = true, silent = true, desc = 'Lazy' })
+
+-- Finding Stuff
+keymap("n", "<leader>fs", function() MiniPick.builtin.files() end, { noremap = true, silent = true, desc = 'Find File' })
+keymap("n", "<leader>e", function() MiniFiles.open(vim.api.nvim_buf_get_name(0)) end,
+    { noremap = true, silent = true, desc = 'Find Manualy' })
+keymap("n", "<leader><space>", function() MiniPick.builtin.buffers() end,
+    { noremap = true, silent = true, desc = 'Find Buffer' })
+keymap("n", "<leader>fg", function() MiniPick.builtin.grep_live() end,
+    { noremap = true, silent = true, desc = 'Find String' })
+keymap("n", "<leader>fwg", function()
+        local wrd = vim.fn.expand("<cWORD>")
+        MiniPick.builtin.grep_live({pattern = wrd})
+    end,
+    { noremap = true, silent = true, desc = 'Find String Cursor' })
+keymap("n", "<leader>fh", function() MiniPick.builtin.help() end, { noremap = true, silent = true, desc = 'Find Help' })
+keymap("n", "<leader>fl", function() MiniExtra.pickers.hl_groups() end,
+    { noremap = true, silent = true, desc = 'Find HL Groups' })
+keymap("n", "<leader>fc", pick_colorscheme, { noremap = true, silent = true, desc = 'Change Colorscheme' })
+
+-- Session Related Keymaps
+keymap("n", "<leader>s", function()
+    vim.cmd('wa')
+    MiniSessions.write()
+    MiniSessions.select()
+end, { noremap = true, silent = true, desc = 'Switch Session' })
+-- keymap("n", "<leader>sw", function() vim.cmd('wa') MiniSessions.write() end, { noremap = true, silent = true, desc = 'Save Session' })
+
+-- Buffer Related Keymaps
+keymap("n", "<leader>bd", "<cmd>bd<cr>", { noremap = true, silent = true, desc = 'Close Buffer' })
+keymap("n", "<leader>bf", function() vim.lsp.buf.format() end, { noremap = true, silent = true, desc = 'Format Buffer' })
+-- keymap("n", "<leader>bf", "gg=G<C-o>", { noremap = true, silent = true, desc = 'Format Buffer' })
+keymap("n", "<C-l>", "<cmd>bnext<cr>", { silent = true, desc = 'Next Buffer' })
+keymap("n", "<C-h>", "<cmd>bprevious<cr>", { silent = true, desc = 'Previous Buffer' })
+
+-- Git Related Keymaps
+keymap("n", "<leader>gl", "<cmd>terminal lazygit<cr>", { noremap = true, silent = true, desc = 'Lazygit' })
+keymap("n", "<leader>gp", "<cmd>terminal git pull<cr>", { noremap = true, silent = true, desc = 'Git Push' })
+keymap("n", "<leader>gs", "<cmd>terminal git push<cr>", { noremap = true, silent = true, desc = 'Git Pull' })
+keymap("n", "<leader>ga", "<cmd>terminal git add .<cr>", { noremap = true, silent = true, desc = 'Git Add All' })
+keymap("n", "<leader>gc", '<cmd>terminal git commit -m "Autocommit from MVIM"<cr>',
+    { noremap = true, silent = true, desc = 'Git Autocommit' })
+
+-- LSP Keymaps
+keymap("n", "<leader>ld", function() vim.lsp.buf.definition() end,
+    { noremap = true, silent = true, desc = 'Go To Definition' })
+keymap("n", "<leader>ls", "<cmd>Pick lsp scope='document_symbol'<cr>",
+    { noremap = true, silent = true, desc = 'Show all Symbols' })
+keymap("n", "<leader>lr", function() vim.lsp.buf.rename() end, { noremap = true, silent = true, desc = 'Rename This' })
+keymap("n", "<leader>la", function() vim.lsp.buf.code_action() end,
+    { noremap = true, silent = true, desc = 'Code Actions' })
+
+-- UI Related Keymaps
+-- Window Navigation
+keymap("n", "<leader>wl", "<cmd>wincmd l<cr>", { noremap = true, silent = true, desc = 'Focus Left' })
+keymap("n", "<leader>wk", "<cmd>wincmd k<cr>", { noremap = true, silent = true, desc = 'Focus Up' })
+keymap("n", "<leader>wj", "<cmd>wincmd j<cr>", { noremap = true, silent = true, desc = 'Focus Down' })
+keymap("n", "<leader>wh", "<cmd>wincmd h<cr>", { noremap = true, silent = true, desc = 'Focus Right' })
+keymap("n", "<leader>wq", "<cmd>wincmd q<cr>", { noremap = true, silent = true, desc = 'Focus Right' })
+keymap("n", "<TAB>", "<C-^>", { noremap = true, silent = true, desc = "Alternate buffers" })
+
+-- Change Colorscheme
+keymap("n", "<leader>ud", "<cmd>set background=dark<cr>", { noremap = true, silent = true, desc = 'Dark Background' })
+keymap("n", "<leader>ub", "<cmd>set background=light<cr>", { noremap = true, silent = true, desc = 'Light Backround' })
+keymap("n", "<leader>um", "<cmd>lua MiniMap.open()<cr>", { noremap = true, silent = true, desc = 'Mini Map' })
+
+-- Font Size and "Presentation Mode"
+keymap("n", "<leader>uf1", "<cmd>GuiFont! " .. MvimFont .. ":h10<cr>",
+    { noremap = true, silent = true, desc = 'Font Size 10' })
+keymap("n", "<leader>uf2", "<cmd>GuiFont! " .. MvimFont .. ":h12<cr>",
+    { noremap = true, silent = true, desc = 'Font Size 12' })
+keymap("n", "<leader>uf3", "<cmd>GuiFont! " .. MvimFont .. ":h14<cr>",
+    { noremap = true, silent = true, desc = 'Font Size 14' })
+keymap("n", "<leader>ufp", "<cmd>GuiFont! " .. MvimFont .. ":h20<cr>",
+    { noremap = true, silent = true, desc = 'Font Size 20' })
+keymap("n", "<leader>ufk", increase_font, { noremap = true, silent = true, desc = 'Increase Font Size' })
+keymap("n", "<leader>ufj", decrease_font, { noremap = true, silent = true, desc = 'Decrease Font Size' })
+
+
+-- Harpoon
+keymap("n", "<leader>hd", function() require("harpoon.mark").add_file() end,
+    { noremap = true, silent = true, desc = 'Harpoon add' })
+keymap("n", "<leader>hv", function() require("harpoon.ui").toggle_quick_menu() end,
+    { noremap = true, silent = true, desc = 'Harpoon Menu' })
+keymap("n", "<leader>hl", function() require("harpoon.ui").nav_next() end,
+    { noremap = true, silent = true, desc = 'Harpoon Next' })
+keymap("n", "<leader>hk", function() require("harpoon.ui").nav_prev() end,
+    { noremap = true, silent = true, desc = 'Harpoon Previous' })
+
+
+-- Completion Navigaiont
+-- keymap('i', '<Down>', [[pumvisible() ? "<C-o>j" : "\<Down>"]], { expr = true, noremap = true })
+-- keymap('i', '<Up>', [[pumvisible() ? "<C-o>k" : "\<Up>"]], { expr = true, noremap = true })

@@ -1,0 +1,8 @@
+vim.api.nvim_set_hl(0, 'MiniTablineCurrent', { link = 'IncSearch' } )
+-- vim.api.nvim_set_hl(0, 'MiniTablineVisible', { link = } )
+vim.api.nvim_set_hl(0, 'MiniTablineHidden', { link = 'Tabline'} )
+vim.api.nvim_set_hl(0, 'MiniTablineModifiedCurrent', { link = 'DiffDelete' } )
+vim.api.nvim_set_hl(0, 'MiniTablineModifiedVisible', { link = 'ErrorMsg' } )
+vim.api.nvim_set_hl(0, 'MiniTablineModifiedHidden', { link = 'ErrorMsg' } )
+vim.api.nvim_set_hl(0, 'MiniTablineFill', { link = 'Normal' } )
+-- vim.api.nvim_set_hl(0, 'MiniTablineTabpagesection', { link = } )
