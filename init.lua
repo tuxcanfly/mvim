@@ -72,4 +72,4 @@ require("lazy").setup({
 
     require("highlights")
     require("keybinds")
-    vim.cmd('colorscheme kanagawa')
+    vim.cmd('colorscheme domscheme')
