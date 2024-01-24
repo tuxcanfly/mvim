@@ -121,7 +121,6 @@ return {
             })
             require('mini.splitjoin').setup()
             require('mini.starter').setup({
-
                 items = {
                     require('mini.starter').sections.builtin_actions(),
                     require('mini.starter').sections.recent_files(5, false),
@@ -138,7 +137,11 @@ return {
                 ██║     ██║  ╚═══╝  ╚═╝██║     ██║
                 ██║     ██║ini      nvi██║     ██║
                 ╚═╝     ╚═╝            ╚═╝     ╚═╝]],
-                footer = footer_n_seconds
+                footer = function()
+                    local stats = require('lazy.stats').stats()
+                    local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
+                    return "Startup Time: " .. ms .. " ms"
+                end
             })
             require('mini.statusline').setup({
                 use_icons = true,
