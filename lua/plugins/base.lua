@@ -136,7 +136,7 @@ return {
                 ██║ ╚═╝ ██║ ╚████╔╝ ██║██║ ╚═╝ ██║
                 ██║     ██║  ╚═══╝  ╚═╝██║     ██║
                 ██║     ██║ini      nvi██║     ██║
-                ╚═╝     ╚═╝            ╚═╝     ╚═╝]],
+                ╚═╝     ╚═╝MINI EDITION╚═╝     ╚═╝]],
                 footer = function()
                     local stats = require('lazy.stats').stats()
                     local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
