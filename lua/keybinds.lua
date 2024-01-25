@@ -1,28 +1,8 @@
-local MvimFont = "JetBrainsMono Nerd Font"
 local keymap = vim.keymap.set
 local MiniPick = require('mini.pick')
 local MiniFiles = require('mini.files')
 local MiniSessions = require('mini.sessions')
 local MiniExtra = require('mini.extra')
-
-function increase_font()
-    local current_size = tonumber(string.match(vim.o.guifont, 'h(%d+)'))
-    if current_size then
-        local new_size = current_size + 1
-        vim.o.guifont = string.gsub(vim.o.guifont, 'h%d+', 'h' .. new_size)
-    end
-end
-
-function decrease_font()
-    local current_size = tonumber(string.match(vim.o.guifont, 'h(%d+)'))
-    if current_size then
-        local new_size = current_size - 1
-        if new_size >= 5 then -- To prevent the font size from becoming too small
-            vim.o.guifont = string.gsub(vim.o.guifont, 'h%d+', 'h' .. new_size)
-        end
-    end
-end
-
 -- MiniPick Colorscheme Picker
 local set_colorscheme = function(name) pcall(vim.cmd, 'colorscheme ' .. name) end
 local pick_colorscheme = function()
@@ -52,8 +32,13 @@ end
 keymap("n", "<leader>wq", "<cmd>wqa<cr>", { noremap = true, silent = true, desc = 'Quit' })
 keymap("n", "<leader>ul", "<cmd>Lazy<cr>", { noremap = true, silent = true, desc = 'Lazy' })
 
+-- Moving Lines TODO: Not sure if we like this over mini.move.
+keymap("v", "J", ":m '>+1<CR>gv=gv", { noremap = true, silent = true, desc = 'Move Line Down' })
+keymap("v", "K", ":m '>-2<CR>gv=gv", { noremap = true, silent = true, desc = 'Move Line Up' })
+
 -- Finding Stuff
-keymap("n", "<leader>fs", function() MiniPick.builtin.files() end, { noremap = true, silent = true, desc = 'Find File' })
+keymap("n", "<leader>fs", function() MiniExtra.pickers.git_files() end,
+    { noremap = true, silent = true, desc = 'Find File' })
 keymap("n", "<leader>e", function() MiniFiles.open(vim.api.nvim_buf_get_name(0)) end,
     { noremap = true, silent = true, desc = 'Find Manualy' })
 keymap("n", "<leader><space>", function() MiniPick.builtin.buffers() end,
@@ -62,7 +47,7 @@ keymap("n", "<leader>fg", function() MiniPick.builtin.grep_live() end,
     { noremap = true, silent = true, desc = 'Find String' })
 keymap("n", "<leader>fwg", function()
         local wrd = vim.fn.expand("<cWORD>")
-        MiniPick.builtin.grep_live({pattern = wrd})
+        MiniPick.builtin.grep_live({ pattern = wrd })
     end,
     { noremap = true, silent = true, desc = 'Find String Cursor' })
 keymap("n", "<leader>fh", function() MiniPick.builtin.help() end, { noremap = true, silent = true, desc = 'Find Help' })
@@ -115,31 +100,3 @@ keymap("n", "<TAB>", "<C-^>", { noremap = true, silent = true, desc = "Alternate
 keymap("n", "<leader>ud", "<cmd>set background=dark<cr>", { noremap = true, silent = true, desc = 'Dark Background' })
 keymap("n", "<leader>ub", "<cmd>set background=light<cr>", { noremap = true, silent = true, desc = 'Light Backround' })
 keymap("n", "<leader>um", "<cmd>lua MiniMap.open()<cr>", { noremap = true, silent = true, desc = 'Mini Map' })
-
--- Font Size and "Presentation Mode"
-keymap("n", "<leader>uf1", "<cmd>GuiFont! " .. MvimFont .. ":h10<cr>",
-    { noremap = true, silent = true, desc = 'Font Size 10' })
-keymap("n", "<leader>uf2", "<cmd>GuiFont! " .. MvimFont .. ":h12<cr>",
-    { noremap = true, silent = true, desc = 'Font Size 12' })
-keymap("n", "<leader>uf3", "<cmd>GuiFont! " .. MvimFont .. ":h14<cr>",
-    { noremap = true, silent = true, desc = 'Font Size 14' })
-keymap("n", "<leader>ufp", "<cmd>GuiFont! " .. MvimFont .. ":h20<cr>",
-    { noremap = true, silent = true, desc = 'Font Size 20' })
-keymap("n", "<leader>ufk", increase_font, { noremap = true, silent = true, desc = 'Increase Font Size' })
-keymap("n", "<leader>ufj", decrease_font, { noremap = true, silent = true, desc = 'Decrease Font Size' })
-
-
--- Harpoon
-keymap("n", "<leader>hd", function() require("harpoon.mark").add_file() end,
-    { noremap = true, silent = true, desc = 'Harpoon add' })
-keymap("n", "<leader>hv", function() require("harpoon.ui").toggle_quick_menu() end,
-    { noremap = true, silent = true, desc = 'Harpoon Menu' })
-keymap("n", "<leader>hl", function() require("harpoon.ui").nav_next() end,
-    { noremap = true, silent = true, desc = 'Harpoon Next' })
-keymap("n", "<leader>hk", function() require("harpoon.ui").nav_prev() end,
-    { noremap = true, silent = true, desc = 'Harpoon Previous' })
-
-
--- Completion Navigaiont
--- keymap('i', '<Down>', [[pumvisible() ? "<C-o>j" : "\<Down>"]], { expr = true, noremap = true })
--- keymap('i', '<Up>', [[pumvisible() ? "<C-o>k" : "\<Up>"]], { expr = true, noremap = true })
