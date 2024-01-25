@@ -11,9 +11,11 @@ return {
     },
     {
         'laytan/cloak.nvim',
-        lazy = false,
         keys = {
             { "<leader>uc", "<cmd>CloakToggle<cr>", desc = "Toggle Cloaking" }
+        },
+        ft = {
+            'yaml'
         },
         config = function()
             require('cloak').setup({
@@ -48,6 +50,9 @@ return {
     },
     {
         "tris203/hawtkeys.nvim",
+        keys = {
+            { "<leader>fk", "<cmd>Hawtkeys<cr>", desc = 'Hawtkeys' }
+        },
         dependencies = {
             "nvim-lua/plenary.nvim",
             "nvim-treesitter/nvim-treesitter",

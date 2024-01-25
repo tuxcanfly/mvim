@@ -1,3 +1,20 @@
+local close_non_normal_windows = function()
+    for _, win_id in ipairs(vim.api.nvim_list_wins()) do
+        local buf_id = vim.api.nvim_win_get_buf(win_id)
+        if vim.bo[buf_id].buftype ~= '' then vim.api.nvim_win_close(win_id, true) end
+    end
+end
+
+local my_minifiles_icon = function(fs_entry)
+    if fs_entry.fs_type == 'directory' then
+        -- NOTE: it is usually a good idea to use icon followed by space
+        return '> ', 'MiniFilesDirectory'
+    else
+        return '  '
+    end
+    return MiniFiles.default_prefix(fs_entry)
+end
+
 return {
     {
         "echasnovski/mini.nvim",
@@ -81,6 +98,9 @@ return {
             -- require('mini.doc').setup()
             require('mini.extra').setup()
             require('mini.files').setup({
+                content = {
+                    prefix = my_minifiles_icon
+                },
                 windows = {
                     preview = true,
                     width_preview = 80,
@@ -100,7 +120,7 @@ return {
             require('mini.map').setup()
             require('mini.misc').setup()
             require('mini.move').setup()
-            require('mini.notify').setup()
+            -- require('mini.notify').setup()
             require('mini.operators').setup()
             -- require('mini.pairs').setup()
             require('mini.pick').setup({
@@ -117,21 +137,24 @@ return {
                 }
             })
             require('mini.sessions').setup({
+
                 autowrite = true,
                 hooks = {
                     pre = {
-                        write = function()
-                            vim.cmd("Neotree close")
-                        end
+                        write = close_non_normal_windows
                     }
                 }
             })
             require('mini.splitjoin').setup()
             require('mini.starter').setup({
+                content_hooks = {
+                    require('mini.starter').gen_hook.adding_bullet("• "),
+                    require('mini.starter').gen_hook.aligning('center', 'center'),
+                },
                 items = {
                     require('mini.starter').sections.builtin_actions(),
                     require('mini.starter').sections.recent_files(5, false),
-                    require('mini.starter').sections.recent_files(5, true),
+                    require('mini.starter').sections.pick(),
                     require('mini.starter').sections.sessions(5, true),
                     { name = 'Lazy', action = 'Lazy', section = 'Lazy' }
                 },
@@ -151,18 +174,18 @@ return {
                 end
             })
             require('mini.statusline').setup({
-                use_icons = true,
+                use_icons = false,
             })
-            local animate = require('mini.animate')
-            animate.setup {
-                scroll = {
-                    -- Disable Scroll Animations, as the can interfer with mouse Scrolling
-                    enable = false,
-                },
-                cursor = {
-                    timing = animate.gen_timing.cubic({ duration = 50, unit = 'total' })
-                },
-            }
+            -- local animate = require('mini.animate')
+            -- animate.setup {
+            --     scroll = {
+            --         -- Disable Scroll Animations, as the can interfer with mouse Scrolling
+            --         enable = false,
+            --     },
+            --     cursor = {
+            --         timing = animate.gen_timing.cubic({ duration = 50, unit = 'total' })
+            --     },
+            -- }
             require('mini.surround').setup()
             require('mini.tabline').setup()
             -- require('mini.test').setup()

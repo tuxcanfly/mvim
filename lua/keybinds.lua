@@ -28,6 +28,7 @@ local pick_colorscheme = function()
     if new_scheme == nil then set_colorscheme(init_scheme) end
 end
 
+
 -- General Vim Things
 keymap("n", "<leader>wq", "<cmd>wqa<cr>", { noremap = true, silent = true, desc = 'Quit' })
 keymap("n", "<leader>ul", "<cmd>Lazy<cr>", { noremap = true, silent = true, desc = 'Lazy' })
@@ -93,7 +94,7 @@ keymap("n", "<leader>wl", "<cmd>wincmd l<cr>", { noremap = true, silent = true, 
 keymap("n", "<leader>wk", "<cmd>wincmd k<cr>", { noremap = true, silent = true, desc = 'Focus Up' })
 keymap("n", "<leader>wj", "<cmd>wincmd j<cr>", { noremap = true, silent = true, desc = 'Focus Down' })
 keymap("n", "<leader>wh", "<cmd>wincmd h<cr>", { noremap = true, silent = true, desc = 'Focus Right' })
-keymap("n", "<leader>wq", "<cmd>wincmd q<cr>", { noremap = true, silent = true, desc = 'Focus Right' })
+keymap("n", "<leader>wd", "<cmd>wincmd q<cr>", { noremap = true, silent = true, desc = 'Close Window' })
 keymap("n", "<TAB>", "<C-^>", { noremap = true, silent = true, desc = "Alternate buffers" })
 
 -- Change Colorscheme
