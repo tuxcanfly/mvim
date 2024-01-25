@@ -13,8 +13,8 @@ Additionaly, I was getting tired of maintaining a Configuration with as many plu
 
 No LSP or such though. I don't really use or need that in my day job.
 
-## Versions
-The Repository contains three "Edition" of Mvim.
+## Editions
+The Repository contains three "Editions" of Mvim.
 
 These Editions can be used through branches. I'll add the one-liners to clone the specific branch later below. But the gist of it is:
 - Clone this Repo
