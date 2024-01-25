@@ -2,6 +2,12 @@ return {
     {
         'ThePrimeagen/harpoon',
         dependencies = { 'nvim-lua/plenary.nvim' },
+        keys = {
+            { "<leader>hd", function() require("harpoon.mark").add_file() end,        desc = 'Harpoon add' },
+            { "<leader>hv", function() require("harpoon.ui").toggle_quick_menu() end, desc = 'Harpoon Menu' },
+            { "<leader>hl", function() require("harpoon.ui").nav_next() end,          desc = 'Harpoon Next' },
+            { "<leader>hk", function() require("harpoon.ui").nav_prev() end,          desc = 'Harpoon Previous' },
+        }
     },
     {
         'laytan/cloak.nvim',
@@ -13,24 +19,15 @@ return {
             require('cloak').setup({
                 enabled = true,
                 cloak_character = '*',
-                -- The applied highlight group (colors) on the cloaking, see `:h highlight`.
                 highlight_group = 'Comment',
-                -- Applies the length of the replacement characters for all matched
-                -- patterns, defaults to the length of the matched pattern.
-                cloak_length = nil, -- Provide a number if you want to hide the true length of the value.
-                -- Wether it should try every pattern to find the best fit or stop after the first.
+                cloak_length = nil,
                 try_all_patterns = true,
                 patterns = {
                     {
-                        -- Match any file starting with '.env'.
-                        -- This can be a table to match multiple file patterns.
                         file_pattern = {
                             '.env*',
                             '*.yml',
                         },
-                        -- Match an equals sign and any character after it.
-                        -- This can also be a table of patterns to cloak,
-                        -- example: cloak_pattern = { ':.+', '-.+' } for yaml files.
                         cloak_pattern = {
                             '=.+',
                             { '(pw: ).+',           replace = '%1' },
@@ -56,9 +53,6 @@ return {
             "nvim-treesitter/nvim-treesitter",
         },
         config = {
-            -- an empty table will work for default config
-            --- if you use functions, or whichkey, or lazy to map keys
-            --- then please see the API below for options
         },
     }
 }

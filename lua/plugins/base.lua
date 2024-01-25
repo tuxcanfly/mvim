@@ -117,7 +117,14 @@ return {
                 }
             })
             require('mini.sessions').setup({
-                autowrite = true
+                autowrite = true,
+                hooks = {
+                    pre = {
+                        write = function()
+                            vim.cmd("Neotree close")
+                        end
+                    }
+                }
             })
             require('mini.splitjoin').setup()
             require('mini.starter').setup({
