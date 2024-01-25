@@ -1,27 +1,8 @@
-local MvimFont = "JetBrainsMono Nerd Font"
 local keymap = vim.keymap.set
 local MiniPick = require('mini.pick')
 local MiniFiles = require('mini.files')
 local MiniSessions = require('mini.sessions')
 local MiniExtra = require('mini.extra')
-
-function increase_font()
-    local current_size = tonumber(string.match(vim.o.guifont, 'h(%d+)'))
-    if current_size then
-        local new_size = current_size + 1
-        vim.o.guifont = string.gsub(vim.o.guifont, 'h%d+', 'h' .. new_size)
-    end
-end
-
-function decrease_font()
-    local current_size = tonumber(string.match(vim.o.guifont, 'h(%d+)'))
-    if current_size then
-        local new_size = current_size - 1
-        if new_size >= 5 then -- To prevent the font size from becoming too small
-            vim.o.guifont = string.gsub(vim.o.guifont, 'h%d+', 'h' .. new_size)
-        end
-    end
-end
 
 -- MiniPick Colorscheme Picker
 local set_colorscheme = function(name) pcall(vim.cmd, 'colorscheme ' .. name) end
@@ -115,19 +96,6 @@ keymap("n", "<TAB>", "<C-^>", { noremap = true, silent = true, desc = "Alternate
 keymap("n", "<leader>ud", "<cmd>set background=dark<cr>", { noremap = true, silent = true, desc = 'Dark Background' })
 keymap("n", "<leader>ub", "<cmd>set background=light<cr>", { noremap = true, silent = true, desc = 'Light Backround' })
 keymap("n", "<leader>um", "<cmd>lua MiniMap.open()<cr>", { noremap = true, silent = true, desc = 'Mini Map' })
-
--- Font Size and "Presentation Mode"
-keymap("n", "<leader>uf1", "<cmd>GuiFont! " .. MvimFont .. ":h10<cr>",
-    { noremap = true, silent = true, desc = 'Font Size 10' })
-keymap("n", "<leader>uf2", "<cmd>GuiFont! " .. MvimFont .. ":h12<cr>",
-    { noremap = true, silent = true, desc = 'Font Size 12' })
-keymap("n", "<leader>uf3", "<cmd>GuiFont! " .. MvimFont .. ":h14<cr>",
-    { noremap = true, silent = true, desc = 'Font Size 14' })
-keymap("n", "<leader>ufp", "<cmd>GuiFont! " .. MvimFont .. ":h20<cr>",
-    { noremap = true, silent = true, desc = 'Font Size 20' })
-keymap("n", "<leader>ufk", increase_font, { noremap = true, silent = true, desc = 'Increase Font Size' })
-keymap("n", "<leader>ufj", decrease_font, { noremap = true, silent = true, desc = 'Decrease Font Size' })
-
 
 -- Harpoon
 keymap("n", "<leader>hd", function() require("harpoon.mark").add_file() end,
