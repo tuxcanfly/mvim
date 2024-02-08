@@ -1,3 +1,4 @@
+mvim_version = "mini"
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
 if not vim.loop.fs_stat(lazypath) then
@@ -25,33 +26,12 @@ vim.opt.scrolloff = 10
 vim.opt.clipboard = "unnamed,unnamedplus"
 -- vim.opt.statuscolumn = '%=%{v:lnum}│%{v:relnum}'
 
--- This should probably not go into the repo, as it's not universally usefull
-vim.filetype.add({
-    filename = {
-        ['inventory'] = 'dosini',
-    }
-})
-
--- Automatically close terminal Buffers when their Process is done
-vim.api.nvim_create_autocmd("TermClose", {
-    callback = function()
-        vim.cmd("bdelete")
-    end
-})
-
--- vim.api.nvim_create_autocmd('User', {
---     pattern = 'MiniFilesWindowOpen',
---     callback = function(args)
---         local win_id = args.data.win_id
---
---         -- Customize window-local settings
---         vim.wo[win_id].winblend = 10
---         vim.api.nvim_win_set_config(win_id, { border = 'rounded' })
---     end,
--- })
 
 require("lazy").setup({
     spec = {
+        { import = "mini" },
+        { import = "base" },
+        { import = "maxi" },
         { import = "plugins" },
     },
     defaults = {
@@ -70,6 +50,8 @@ require("lazy").setup({
     },
 })
 
-    require("highlights")
-    require("keybinds")
-    vim.cmd('colorscheme kanagawa')
+require("autocmds")
+require("filetypes")
+require("highlights")
+require("keybinds")
+vim.cmd('colorscheme kanagawa')
