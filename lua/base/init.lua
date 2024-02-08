@@ -1,7 +1,11 @@
 return {
-    'rebelot/kanagawa.nvim',
+    {
+        'rebelot/kanagawa.nvim',
+        enabled = mvim_mini(),
+    },
     {
         'VonHeikemen/lsp-zero.nvim',
+        enabled = mvim_mini(),
         branch = 'v3.x',
         lazy = true,
         config = false,
@@ -13,11 +17,13 @@ return {
     },
     {
         'williamboman/mason.nvim',
+        enabled = mvim_mini(),
         lazy = false,
         config = true,
     },
     {
         'neovim/nvim-lspconfig',
+        enabled = mvim_mini(),
         cmd = { 'LspInfo', 'LspInstall', 'LspStart' },
         event = { 'BufReadPre', 'BufNewFile' },
         dependencies = {
@@ -68,6 +74,7 @@ return {
     },
     {
         'nvim-treesitter/nvim-treesitter',
+        enabled = mvim_mini(),
         config = function()
             require("nvim-treesitter.configs").setup({
                 incremental_selection = {

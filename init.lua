@@ -1,4 +1,21 @@
-mvim_version = "mini"
+mvim_version = "maxi"
+
+mvim_mini = function()
+    if mvim_version == "mini" then
+        return false
+    else
+        return true
+    end
+end
+
+mvim_maxi = function()
+    if mvim_version == "maxi" then
+        return true
+    else
+        return false
+    end
+end
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
 if not vim.loop.fs_stat(lazypath) then
@@ -29,9 +46,9 @@ vim.opt.clipboard = "unnamed,unnamedplus"
 
 require("lazy").setup({
     spec = {
-        { import = "mini" },
-        { import = "base" },
         { import = "maxi" },
+        { import = "base" },
+        { import = "mini" },
         { import = "plugins" },
     },
     defaults = {
@@ -50,8 +67,13 @@ require("lazy").setup({
     },
 })
 
+if mvim_maxi() then
+    vim.cmd('colorscheme kanagawa')
+else
+    vim.cmd('colorscheme domscheme')
+end
+
 require("autocmds")
 require("filetypes")
 require("highlights")
 require("keybinds")
-vim.cmd('colorscheme kanagawa')
