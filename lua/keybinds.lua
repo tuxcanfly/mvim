@@ -52,12 +52,13 @@ keymap("n", "<leader>fl", function() MiniExtra.pickers.hl_groups() end,
 keymap("n", "<leader>fc", pick_colorscheme, { noremap = true, silent = true, desc = 'Change Colorscheme' })
 
 -- Session Related Keymaps
-keymap("n", "<leader>s", function()
+keymap("n", "<leader>ss", function()
     vim.cmd('wa')
     MiniSessions.write()
     MiniSessions.select()
 end, { noremap = true, silent = true, desc = 'Switch Session' })
--- keymap("n", "<leader>sw", function() vim.cmd('wa') MiniSessions.write() end, { noremap = true, silent = true, desc = 'Save Session' })
+keymap("n", "<leader>sw", function() vim.cmd('wa') MiniSessions.write() end, { noremap = true, silent = true, desc = 'Save Session' })
+keymap("n", "<leader>sf", function() vim.cmd('wa') MiniSessions.select() end, { noremap = true, silent = true, desc = 'Load Session' })
 
 -- Buffer Related Keymaps
 keymap("n", "<leader>bd", "<cmd>bd<cr>", { noremap = true, silent = true, desc = 'Close Buffer' })
