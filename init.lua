@@ -1,35 +1,19 @@
-mvim_version = "maxi"
-
-mvim_mini = function()
-    if mvim_version == "mini" then
-        return false
-    else
-        return true
-    end
+-- Clone 'mini.nvim' manually in a way that it gets managed by 'mini.deps'
+local path_package = vim.fn.stdpath('data') .. '/site/'
+local mini_path = path_package .. 'pack/deps/start/mini.nvim'
+if not vim.loop.fs_stat(mini_path) then
+  vim.cmd('echo "Installing `mini.nvim`" | redraw')
+  local clone_cmd = {
+    'git', 'clone', '--filter=blob:none',
+    'https://github.com/echasnovski/mini.nvim', mini_path
+  }
+  vim.fn.system(clone_cmd)
+  vim.cmd('packadd mini.nvim | helptags ALL')
+  vim.cmd('echo "Installed `mini.nvim`" | redraw')
 end
 
-mvim_maxi = function()
-    if mvim_version == "maxi" then
-        return true
-    else
-        return false
-    end
-end
-
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-
-if not vim.loop.fs_stat(lazypath) then
-    vim.fn.system({
-        "git",
-        "clone",
-        "--filter=blob:none",
-        "https://github.com/folke/lazy.nvim.git",
-        "--branch=stable", -- latest stable release
-        lazypath,
-    })
-end
-
-vim.opt.rtp:prepend(lazypath)
+-- Set up 'mini.deps' (customize to your liking)
+require('mini.deps').setup({ path = { package = path_package } })
 
 vim.g.mapleader = " "
 vim.o.background = 'dark'
@@ -42,36 +26,6 @@ vim.opt.relativenumber = true
 vim.opt.scrolloff = 10
 vim.opt.clipboard = "unnamed,unnamedplus"
 -- vim.opt.statuscolumn = '%=%{v:lnum}│%{v:relnum}'
-
-
-require("lazy").setup({
-    spec = {
-        { import = "maxi" },
-        { import = "base" },
-        { import = "mini" },
-        { import = "plugins" },
-    },
-    defaults = {
-        -- By default, only LazyVim plugins will be lazy-loaded. Your custom plugins will load during startup.
-        -- If you know what you're doing, you can set this to `true` to have all your custom plugins lazy-loaded by default.
-        lazy = false,
-        -- It's recommended to leave version=false for now, since a lot the plugin that support versioning,
-        -- have outdated releases, which may break your Neovim install.
-        version = false, -- always use the latest git commit
-        -- version = "*", -- try installing the latest stable version for plugins that support semver
-    },
-    install = {},
-    checker = { enabled = false }, -- automatically check for plugin updates
-    change_detection = {
-        enabled = false,
-    },
-})
-
-if mvim_maxi() then
-    vim.cmd('colorscheme kanagawa')
-else
-    vim.cmd('colorscheme domscheme')
-end
 
 require("autocmds")
 require("filetypes")
