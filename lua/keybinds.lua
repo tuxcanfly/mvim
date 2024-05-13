@@ -32,7 +32,7 @@ end
 -- General Vim Things
 keymap("n", "<leader>wq", "<cmd>wqa<cr>", { noremap = true, silent = true, desc = 'Quit' })
 keymap("n", "<leader>ul", "<cmd>Lazy<cr>", { noremap = true, silent = true, desc = 'Lazy' })
-keymap("", "ö", ":", { noremap = true, silent = true })
+keymap("", "ö", ":")
 
 -- Finding Stuff
 keymap("n", "<leader>fs", function() MiniPick.builtin.files() end, { noremap = true, silent = true, desc = 'Find File' })
@@ -58,10 +58,20 @@ keymap("n", "<leader>ss", function()
     MiniSessions.write()
     MiniSessions.select()
 end, { noremap = true, silent = true, desc = 'Switch Session' })
-keymap("n", "<leader>sw", function()MiniSessions.write() end,{ noremap = true, silent = true, desc = 'Save Session' })
+keymap("n", "<leader>sw", function() MiniSessions.write() end, { noremap = true, silent = true, desc = 'Save Session' })
 keymap("n", "<leader>sf", function() MiniSessions.select() end, { noremap = true, silent = true, desc = 'Load Session' })
 
 -- Editing Keymaps
+-- Insert a Password at point
+keymap("n", "<leader>ip",
+    function()
+        local command = 'pwgen -N 1 -B 32'
+        local password = vim.fn.systemlist(command)
+        for _, line in ipairs(password) do
+            vim.api.nvim_put({ line }, '', true, true)
+        end
+    end,
+    { noremap = true, silent = true, desc = 'Insert Password' })
 
 -- Buffer Related Keymaps
 keymap("n", "<leader>bd", "<cmd>bd<cr>", { noremap = true, silent = true, desc = 'Close Buffer' })
@@ -69,6 +79,7 @@ keymap("n", "<leader>bf", function() vim.lsp.buf.format() end, { noremap = true,
 -- keymap("n", "<leader>bf", "gg=G<C-o>", { noremap = true, silent = true, desc = 'Format Buffer' })
 keymap("n", "<C-l>", "<cmd>bnext<cr>", { silent = true, desc = 'Next Buffer' })
 keymap("n", "<C-h>", "<cmd>bprevious<cr>", { silent = true, desc = 'Previous Buffer' })
+keymap("n", "<leader>k", "<C-^>", { noremap = true, silent = true, desc = "Alternate buffers" })
 
 -- Git Related Keymaps
 keymap("n", "<leader>gl", "<cmd>terminal lazygit<cr>", { noremap = true, silent = true, desc = 'Lazygit' })
@@ -100,3 +111,5 @@ keymap("n", "<TAB>", "<C-^>", { noremap = true, silent = true, desc = "Alternate
 keymap("n", "<leader>ud", "<cmd>set background=dark<cr>", { noremap = true, silent = true, desc = 'Dark Background' })
 keymap("n", "<leader>ub", "<cmd>set background=light<cr>", { noremap = true, silent = true, desc = 'Light Backround' })
 keymap("n", "<leader>um", "<cmd>lua MiniMap.open()<cr>", { noremap = true, silent = true, desc = 'Mini Map' })
+
+-- Cloaking

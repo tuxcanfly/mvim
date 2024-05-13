@@ -29,6 +29,7 @@ now(function()
     vim.opt.scrolloff = 10
     vim.opt.clipboard = "unnamed,unnamedplus"
     -- vim.opt.statuscolumn = '%=%{v:lnum}│%{v:relnum}'
+    vim.cmd('colorscheme modus-tinted')
 end)
 
 later(function() require('mini.ai').setup() end)
@@ -45,7 +46,7 @@ later(function()
         },
     }
 end)
--- Disabled as we use mini.colors
+-- Disabled Here. This is called directly from our Colorscheme in the colors/ folder
 -- You can enable this by uncommenting.
 -- We provide a basic Catppuccin Colorscheme here
 -- later(function()
@@ -74,7 +75,7 @@ later(function()
     require('mini.basics').setup({
         options = {
             extra_ui = true,
-            win_borders = 'double',
+            win_borders = 'rounded',
         },
         mappings = {
             windows = true,
@@ -117,14 +118,15 @@ later(function()
         },
 
         clues = {
-            { mode = 'n', keys = '<Leader>f', desc = 'Find' },
-            { mode = 'n', keys = '<Leader>l', desc = 'LSP' },
-            { mode = 'n', keys = '<Leader>w', desc = 'Window' },
-            { mode = 'n', keys = '<Leader>s', desc = 'Session' },
-            { mode = 'n', keys = '<Leader>b', desc = 'Buffer' },
-            { mode = 'n', keys = '<Leader>g', desc = 'Git' },
-            { mode = 'n', keys = '<Leader>u', desc = 'UI' },
-            { mode = 'n', keys = '<Leader>q', desc = 'NVim' },
+            { mode = 'n', keys = '<Leader>b', desc = ' Buffer' },
+            { mode = 'n', keys = '<Leader>f', desc = ' Find' },
+            { mode = 'n', keys = '<Leader>g', desc = '󰊢 Git' },
+            { mode = 'n', keys = '<Leader>i', desc = '󰏪 Insert' },
+            { mode = 'n', keys = '<Leader>l', desc = '󰘦 LSP' },
+            { mode = 'n', keys = '<Leader>q', desc = ' NVim' },
+            { mode = 'n', keys = '<Leader>s', desc = '󰆓 Session' },
+            { mode = 'n', keys = '<Leader>u', desc = '󰔃 UI' },
+            { mode = 'n', keys = '<Leader>w', desc = ' Window' },
             function() MiniClue.gen_clues.g() end,
             function() MiniClue.gen_clues.builtin_completion() end,
             function() MiniClue.gen_clues.marks() end,
@@ -137,10 +139,7 @@ later(function()
         }
     })
 end)
-later(function()
-    require('mini.colors').setup()
-    vim.cmd('colorscheme catppuccin')
-end)
+later(function() require('mini.colors').setup() end)
 later(function() require('mini.comment').setup() end)
 later(function()
     require('mini.completion').setup({
@@ -163,7 +162,49 @@ later(function()
     })
 end)
 later(function() require('mini.fuzzy').setup() end)
-later(function() require('mini.hipatterns').setup() end)
+now(function()
+    local hipatterns = require('mini.hipatterns')
+
+    local censor_extmark_opts = function(_, match, _)
+        local mask = string.rep('*', vim.fn.strchars(match))
+        return {
+            virt_text = { { mask, 'Comment' } },
+            virt_text_pos = 'overlay',
+            priority = 200,
+            right_gravity = false,
+        }
+    end
+
+    local password_table = { pattern = {
+        'password: ()%S+()',
+        'password_usr: ()%S+()',
+    }, group = '', extmark_opts = censor_extmark_opts }
+
+    hipatterns.setup({
+        highlighters = {
+            -- Highlight standalone 'FIXME', 'HACK', 'TODO', 'NOTE'
+            fixme     = { pattern = '%f[%w]()FIXME()%f[%W]', group = 'MiniHipatternsFixme' },
+            hack      = { pattern = '%f[%w]()HACK()%f[%W]', group = 'MiniHipatternsHack' },
+            todo      = { pattern = '%f[%w]()TODO()%f[%W]', group = 'MiniHipatternsTodo' },
+            note      = { pattern = '%f[%w]()NOTE()%f[%W]', group = 'MiniHipatternsNote' },
+
+            -- Cloaking Passwords
+            pw        = password_table,
+
+            -- Highlight hex color strings (`#rrggbb`) using that color
+            hex_color = hipatterns.gen_highlighter.hex_color(),
+        },
+    })
+
+    vim.keymap.set("n", "<leader>up", function()
+        if next(hipatterns.config.highlighters.pw) == nil then
+            hipatterns.config.highlighters.pw = password_table
+        else
+            hipatterns.config.highlighters.pw = {}
+        end
+        vim.cmd('edit')
+    end, { desc = 'Toggle Password Cloaking' })
+end)
 -- We disable this, as we use our own Colorscheme through mini.colors
 -- You can enable this by uncommenting
 -- We Provide a Modus Vivendi inspired setup here
@@ -185,6 +226,18 @@ later(function() require('mini.notify').setup() end)
 later(function() require('mini.operators').setup() end)
 later(function() require('mini.pairs').setup() end)
 later(function()
+    local win_config = function()
+        height = math.floor(0.618 * vim.o.lines)
+        width = math.floor(0.618 * vim.o.columns)
+        return {
+            anchor = 'NW',
+            height = height,
+            width = width,
+            border = 'rounded',
+            row = math.floor(0.5 * (vim.o.lines - height)),
+            col = math.floor(0.5 * (vim.o.columns - width)),
+        }
+    end
     require('mini.pick').setup({
         mappings = {
             choose_in_vsplit = '<C-CR>',
@@ -193,9 +246,7 @@ later(function()
             use_cache = true
         },
         window = {
-            config = {
-                border = 'rounded'
-            },
+            config = win_config
         }
     })
 end)
@@ -250,11 +301,19 @@ later(function()
     })
     require('mason').setup()
     require('mason-lspconfig').setup()
-    require('lspconfig').lua_ls.setup {}
-    require('lspconfig').ansiblels.setup {
-        filetypes = {
-            "yaml"
+    require('lspconfig').lua_ls.setup {
+        settings = {
+            Lua = {
+                diagnostics = {
+                    disable = { "lowercase-global", "undefined-global" }
+                },
+            }
         }
+    }
+    require('lspconfig').ansiblels.setup {
+        -- filetypes = {
+        --     "yaml"
+        -- }
     }
     -- require('lspconfig').yamlls.setup {}
 end)
