@@ -32,6 +32,7 @@ end
 -- General Vim Things
 keymap("n", "<leader>wq", "<cmd>wqa<cr>", { noremap = true, silent = true, desc = 'Quit' })
 keymap("n", "<leader>ul", "<cmd>Lazy<cr>", { noremap = true, silent = true, desc = 'Lazy' })
+keymap("", "ö", ":", { noremap = true, silent = true })
 
 -- Finding Stuff
 keymap("n", "<leader>fs", function() MiniPick.builtin.files() end, { noremap = true, silent = true, desc = 'Find File' })
@@ -43,7 +44,7 @@ keymap("n", "<leader>fg", function() MiniPick.builtin.grep_live() end,
     { noremap = true, silent = true, desc = 'Find String' })
 keymap("n", "<leader>fwg", function()
         local wrd = vim.fn.expand("<cWORD>")
-        MiniPick.builtin.grep_live({pattern = wrd})
+        MiniPick.builtin.grep_live({ pattern = wrd })
     end,
     { noremap = true, silent = true, desc = 'Find String Cursor' })
 keymap("n", "<leader>fh", function() MiniPick.builtin.help() end, { noremap = true, silent = true, desc = 'Find Help' })
@@ -57,8 +58,10 @@ keymap("n", "<leader>ss", function()
     MiniSessions.write()
     MiniSessions.select()
 end, { noremap = true, silent = true, desc = 'Switch Session' })
-keymap("n", "<leader>sw", function() vim.cmd('wa') MiniSessions.write() end, { noremap = true, silent = true, desc = 'Save Session' })
-keymap("n", "<leader>sf", function() vim.cmd('wa') MiniSessions.select() end, { noremap = true, silent = true, desc = 'Load Session' })
+keymap("n", "<leader>sw", function()MiniSessions.write() end,{ noremap = true, silent = true, desc = 'Save Session' })
+keymap("n", "<leader>sf", function() MiniSessions.select() end, { noremap = true, silent = true, desc = 'Load Session' })
+
+-- Editing Keymaps
 
 -- Buffer Related Keymaps
 keymap("n", "<leader>bd", "<cmd>bd<cr>", { noremap = true, silent = true, desc = 'Close Buffer' })

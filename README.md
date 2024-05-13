@@ -2,8 +2,6 @@
 
 This is my NeoVim Configuration based entirely on [mini.nvim](https://github.com/echasnovski/mini.nvim)
 
-And [lazy.nvim](https://github.com/folke/lazy.nvim). It's just more convenient than manualy Updating.
-
 ![Dashboard](screenshot_dashboard.png)
 ![Code](screenshot.png)
 
@@ -13,24 +11,29 @@ Additionaly, I was getting tired of maintaining a Configuration with as many plu
 
 No LSP or such though. I don't really use or need that in my day job.
 
-## Editions
-The Repository contains three "Editions" of Mvim.
+## LSP Configuration
+I do provide a minimal LSP Setup. This is enough for my personal use but can be extended.
+The basic gist is, that you need to manually install your prefered LSPs through Mason and then add `require('lspconfig').yourlsp.setup {}` to init.lua
+I'll add a more detailed description later.
 
-These Editions can be used through branches. I'll add the one-liners to clone the specific branch later below. But the gist of it is:
-- Clone this Repo
-- cd into the repo
-- git checkout 'edition'
+## Colorschemes
+Mini.nvim provieds three different option to set up a colorscheme:
+- mini.colors
+- mini.hues
+- mini.base16
+Per default we use mini.colors with our own colorscheme.
 
-### Main
-This is the main "recommended" Edition of Mvim. It contains mini.nvim with all the setup, plus a basic LSP setup.
+### mini.colors
+If you want to add a new colorscheme, just copy one of the existing ones in the `colors` folder and edit it to your liking.
+The plan for the future is, to extend this with some "favorite" colorschemes
 
-### Mini
-This is the "Mini only" Edition of Mvim. It doesn't come with the LSP Setup and only uses lazy plus mini.nvim.
+### mini.hues
+This creates a colorscheme based on a background and foreground color. Alternatively it provides a "randomhues" colorscheme that randomizes the look with each call.
+You can uncomment this in `init.lua`, if you want to use it.
 
-### Maxi
-This is the "All the Features Please" Edition of Mvim. I add stuff like Snippets, Neo-Tree, Harpoon and other Plugins i'm either Testing or Enjoy in daily use, but don't feel like Fit the ethos of "Mvim".
-It's pretty much my "Daily Driver" Config that's more involved than the basic "Mini and LSP" Setup.
-I don't recommend using this. Mostly because it contains a lot of Personal configuration that's specific to me, but also because i feel like this kind of extensive Setup is done better by other Distributions like Lazyvim or NVChad.
+### mini.base16
+Here we can provide a [base16](https://github.com/chriskempson/base16) theme. The 16 colors are provided through the "palette" array.
+You can uncomment this in `init.lua`, if you want to use it. It's set up with a basic `catppuccin` inspired Colorscheme.
 
 ## How Sessions Work
 

@@ -251,6 +251,12 @@ later(function()
     require('mason').setup()
     require('mason-lspconfig').setup()
     require('lspconfig').lua_ls.setup {}
+    require('lspconfig').ansiblels.setup {
+        filetypes = {
+            "yaml"
+        }
+    }
+    -- require('lspconfig').yamlls.setup {}
 end)
 
 require("autocmds")
