@@ -19,7 +19,7 @@ local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 
 now(function()
     vim.g.mapleader = " "
-    vim.o.background = 'dark'
+    vim.opt.background = 'dark'
     vim.opt.listchars = { extends = '.', precedes = '|', nbsp = '_', tab = '└─┘' }
     vim.opt.smartindent = true
     vim.opt.shiftwidth = 4
@@ -28,8 +28,10 @@ now(function()
     vim.opt.relativenumber = true
     vim.opt.scrolloff = 10
     vim.opt.clipboard = "unnamed,unnamedplus"
+    -- This is needed for mini.animate to work with mouse scrolling
+    vim.opt.mousescroll = 'ver:1,hor:1'
     -- vim.opt.statuscolumn = '%=%{v:lnum}│%{v:relnum}'
-    vim.cmd('colorscheme modus-tinted')
+    vim.cmd('colorscheme randomhue')
 end)
 
 later(function() require('mini.ai').setup() end)
@@ -39,7 +41,7 @@ later(function()
     animate.setup {
         scroll = {
             -- Disable Scroll Animations, as the can interfer with mouse Scrolling
-            enable = false,
+            enable = true,
         },
         cursor = {
             timing = animate.gen_timing.cubic({ duration = 50, unit = 'total' })
@@ -175,10 +177,14 @@ now(function()
         }
     end
 
-    local password_table = { pattern = {
-        'password: ()%S+()',
-        'password_usr: ()%S+()',
-    }, group = '', extmark_opts = censor_extmark_opts }
+    local password_table = {
+        pattern = {
+            'password: ()%S+()',
+            'password_usr: ()%S+()',
+        },
+        group = '',
+        extmark_opts = censor_extmark_opts
+    }
 
     hipatterns.setup({
         highlighters = {
@@ -208,7 +214,7 @@ end)
 -- We disable this, as we use our own Colorscheme through mini.colors
 -- You can enable this by uncommenting
 -- We Provide a Modus Vivendi inspired setup here
--- later(function() require('mini.hues').setup({ background = '#0d0e1c', foreground = '#ffffff' }) end)
+-- later(function() require('mini.hues').setup({ background = '#0d0e1c', foreground = '#feacd0' }) end)
 later(function()
     require('mini.indentscope').setup({
         draw = {
@@ -221,8 +227,13 @@ later(function() require('mini.jump').setup() end)
 later(function() require('mini.jump2d').setup() end)
 later(function() require('mini.map').setup() end)
 later(function() require('mini.misc').setup() end)
-later(function() require('mini.move').setup() end)
-later(function() require('mini.notify').setup() end)
+later(function() require('mini.move').setup({}) end)
+later(function() require('mini.notify').setup({
+    lsp_progress = {
+        enable = true,
+        duration_last = 200,
+    }
+}) end)
 later(function() require('mini.operators').setup() end)
 later(function() require('mini.pairs').setup() end)
 later(function()

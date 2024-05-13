@@ -110,6 +110,4 @@ keymap("n", "<TAB>", "<C-^>", { noremap = true, silent = true, desc = "Alternate
 -- Change Colorscheme
 keymap("n", "<leader>ud", "<cmd>set background=dark<cr>", { noremap = true, silent = true, desc = 'Dark Background' })
 keymap("n", "<leader>ub", "<cmd>set background=light<cr>", { noremap = true, silent = true, desc = 'Light Backround' })
-keymap("n", "<leader>um", "<cmd>lua MiniMap.open()<cr>", { noremap = true, silent = true, desc = 'Mini Map' })
-
--- Cloaking
+keymap("n", "<leader>um", function() require('mini.map').toggle() end, { noremap = true, silent = true, desc = 'Mini Map' })
