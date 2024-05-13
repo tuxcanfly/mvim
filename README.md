@@ -2,8 +2,8 @@
 
 This is my NeoVim Configuration based entirely on [mini.nvim](https://github.com/echasnovski/mini.nvim)
 
-![Dashboard](screenshot_dashboard.png)
-![Code](screenshot.png)
+![Dashboard](mvim-dashboard.png)
+![Code](mvim.png)
 
 ## Why?
 Mostly because it's a single plugin with most functionality i need. So i can easily scp this to Servers without Internet Connection and still have my entire NeoVim Setup.
