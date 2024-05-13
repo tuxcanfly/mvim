@@ -18,25 +18,52 @@ require('mini.deps').setup({ path = { package = path_package } })
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 
 now(function()
-    vim.g.mapleader = " "
-    vim.opt.background = 'dark'
-    vim.opt.listchars = { extends = '.', precedes = '|', nbsp = '_', tab = '└─┘' }
-    vim.opt.smartindent = true
-    vim.opt.shiftwidth = 4
-    vim.opt.tabstop = 4
-    vim.opt.expandtab = true
-    vim.opt.relativenumber = true
-    vim.opt.scrolloff = 10
-    vim.opt.clipboard = "unnamed,unnamedplus"
-    -- This is needed for mini.animate to work with mouse scrolling
-    vim.opt.mousescroll = 'ver:1,hor:1'
+    vim.g.mapleader      = " "
+    vim.o.backup         = false
+    vim.o.writebackup    = false
+    vim.o.undofile       = true
+    vim.o.mouse          = 'a'
+    vim.o.cursorline     = true
+    vim.o.laststatus     = 2
+    vim.o.list           = true
+    vim.o.ruler          = false
+    vim.o.signcolumn     = 'yes'
+    vim.o.splitbelow     = true
+    vim.o.splitright     = true
+    vim.o.termguicolors  = true
+    vim.o.background     = 'dark'
+    vim.o.listchars      = table.concat({ 'extends:…', 'nbsp:␣', 'precedes:…', 'tab:> ' }, ',')
+    vim.o.fillchars      = table.concat(
+        { 'eob: ', 'fold:╌', 'horiz:═', 'horizdown:╦', 'horizup:╩', 'vert:║', 'verthoriz:╬', 'vertleft:╣', 'vertright:╠' },
+        ','
+    )
+    vim.o.smartindent    = true
+    vim.o.autoindent     = true
+    vim.o.formatoptions  = 'rqnl1j'
+    vim.o.shiftwidth     = 4
+    vim.o.tabstop        = 4
+    vim.o.expandtab      = true
+    vim.o.relativenumber = true
+    vim.o.ignorecase     = true
+    vim.o.incsearch      = true
+    vim.o.infercase      = true
+    vim.o.scrolloff      = 10
+    vim.o.clipboard      = "unnamed,unnamedplus"
     -- vim.opt.statuscolumn = '%=%{v:lnum}│%{v:relnum}'
+    vim.opt.iskeyword:append('-')
+    vim.o.spelllang    = 'de,en'
+    vim.o.spelloptions = 'camel'
+    vim.opt.complete:append('kspell')
+
+    vim.cmd('filetype plugin indent on')
     vim.cmd('colorscheme randomhue')
 end)
 
 later(function() require('mini.ai').setup() end)
 later(function() require('mini.align').setup() end)
 later(function()
+    -- This is needed for mini.animate to work with mouse scrolling
+    vim.opt.mousescroll = 'ver:1,hor:1'
     local animate = require('mini.animate')
     animate.setup {
         scroll = {
@@ -228,12 +255,20 @@ later(function() require('mini.jump2d').setup() end)
 later(function() require('mini.map').setup() end)
 later(function() require('mini.misc').setup() end)
 later(function() require('mini.move').setup({}) end)
-later(function() require('mini.notify').setup({
-    lsp_progress = {
-        enable = true,
-        duration_last = 200,
-    }
-}) end)
+later(function()
+    -- We took this from echasnovski's personal configuration
+    -- https://github.com/echasnovski/nvim/blob/master/init.lua
+    local filterout_lua_diagnosing = function(notif_arr)
+        local not_diagnosing = function(notif) return not vim.startswith(notif.msg, 'lua_ls: Diagnosing') end
+        notif_arr = vim.tbl_filter(not_diagnosing, notif_arr)
+        return MiniNotify.default_sort(notif_arr)
+    end
+    require('mini.notify').setup({
+        content = { sort = filterout_lua_diagnosing },
+        window = { config = { border = 'double' } },
+    })
+    -- vim.notify = MiniNotify.make_notify()
+end)
 later(function() require('mini.operators').setup() end)
 later(function() require('mini.pairs').setup() end)
 later(function()
@@ -260,6 +295,7 @@ later(function()
             config = win_config
         }
     })
+    vim.ui.select = MiniPick.ui_select
 end)
 now(function()
     require('mini.sessions').setup({
@@ -297,11 +333,6 @@ later(function() require('mini.tabline').setup() end)
 later(function() require('mini.trailspace').setup() end)
 later(function() require('mini.visits').setup() end)
 
--- later(function()
---     add('VonHeikemen/lsp-zero.nvim')
---     require('lsp-zero')
--- end)
-
 later(function()
     add({
         source = 'neovim/nvim-lspconfig',
@@ -321,12 +352,15 @@ later(function()
             }
         }
     }
-    require('lspconfig').ansiblels.setup {
-        -- filetypes = {
-        --     "yaml"
-        -- }
-    }
+    require('lspconfig').ansiblels.setup {}
     -- require('lspconfig').yamlls.setup {}
+end)
+
+later(function()
+  add({
+      source = 'nvim-treesitter/nvim-treesitter'
+  })
+   require('nvim-treesitter.configs').setup({})
 end)
 
 require("autocmds")
