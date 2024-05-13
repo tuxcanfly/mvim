@@ -52,22 +52,22 @@ end
 -- - Accent chroma 80
 if vim.o.background == 'light' then
   palette = {
-    base00 = '#1e1e2e',
-    base01 = '#181825',
-    base02 = '#313244',
-    base03 = '#45475a',
-    base04 = '#585b70',
-    base05 = '#cdd6f4',
-    base06 = '#f5e0dc',
-    base07 = '#b4befe',
-    base08 = '#f38ba8',
-    base09 = '#fab387',
-    base0A = '#f9e2af',
-    base0B = '#a6e3a1',
-    base0C = '#94e2d5',
-    base0D = '#89b4fa',
-    base0E = '#cba6f7',
-    base0F = '#f2cdcd'
+	base00 = "#fbf1c7",
+	base01 = "#f2e5bc",
+	base02 = "#d5c4a1",
+	base03 = "#bdae93",
+	base04 = "#665c54",
+	base05 = "#654735",
+	base06 = "#3c3836",
+	base07 = "#282828",
+	base08 = "#c14a4a",
+	base09 = "#c35e0a",
+	base0A = "#b47109",
+	base0B = "#6c782e",
+	base0C = "#4c7a5d",
+	base0D = "#45707a",
+	base0E = "#945e80",
+	base0F = "#e78a4e",
   }
   use_cterm = {
     base00 = 252,

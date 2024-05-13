@@ -36,61 +36,18 @@ local pick_colorscheme = function()
     if new_scheme == nil then set_colorscheme(init_scheme) end
 end
 
--- ╔═══════════════════════╗
--- ║    General Keymaps    ║
--- ╚═══════════════════════╝
-keymap("n", "<leader>wq", "<cmd>wqa<cr>", { noremap = true, silent = true, desc = 'Quit' })
-keymap("", "ö", ":")
-
 -- ╔════════════════════╗
 -- ║    Find Keymaps    ║
 -- ╚════════════════════╝
-keymap("n", "<leader>fs", function() require('mini.pick').builtin.files() end,
-    { noremap = true, silent = true, desc = 'Find File' })
-keymap("n", "<leader>fa", function() require('mini.pick').builtin.resume() end,
-    { noremap = true, silent = true, desc = 'Find File' })
-keymap("n", "<leader>e", function()
-        local buffer_name = vim.api.nvim_buf_get_name(0)
-        if buffer_name == "" or string.match(buffer_name, "Starter") then
-            require('mini.files').open(vim.loop.cwd())
-        else
-            require('mini.files').open(vim.api.nvim_buf_get_name(0))
-        end
-    end,
-    { noremap = true, silent = true, desc = 'Find Manualy' })
-keymap("n", "<leader><space>", function() require('mini.pick').builtin.buffers() end,
-    { noremap = true, silent = true, desc = 'Find Buffer' })
-keymap("n", "<leader>fg", function() require('mini.pick').builtin.grep_live() end,
-    { noremap = true, silent = true, desc = 'Find String' })
-keymap("n", "<leader>fg", function() require('fzf-lua').live_grep() end,
-    { noremap = true, silent = true, desc = 'Find String' })
-keymap("n", "<leader>fwg", function()
-        local wrd = vim.fn.expand("<cWORD>")
-        require('mini.pick').builtin.grep_live({ pattern = wrd })
-    end,
-    { noremap = true, silent = true, desc = 'Find String Cursor' })
-keymap("n", "<leader>fh", function() require('mini.pick').builtin.help() end,
-    { noremap = true, silent = true, desc = 'Find Help' })
-keymap("n", "<leader>fl", function() require('mini.extra').pickers.hl_groups() end,
-    { noremap = true, silent = true, desc = 'Find HL Groups' })
-keymap("n", "<leader>fc", pick_colorscheme, { noremap = true, silent = true, desc = 'Change Colorscheme' })
-keymap('n', ',', function() require('mini.extra').pickers.buf_lines({ scope = 'current' }) end, { nowait = true })
-
--- ╔═══════════════════════╗
--- ║    Session Keymaps    ║
--- ╚═══════════════════════╝
-keymap("n", "<leader>ss", function()
-    vim.cmd('wa')
-    require('mini.sessions').write()
-    require('mini.sessions').select()
-end, { noremap = true, silent = true, desc = 'Switch Session' })
-keymap("n", "<leader>sw", function()
-    local cwd = vim.fn.getcwd()
-    local last_folder = cwd:match("([^/]+)$")
-    require('mini.sessions').write(last_folder)
-end, { noremap = true, silent = true, desc = 'Save Session' })
-keymap("n", "<leader>sf", function() require('mini.sessions').select() end,
-    { noremap = true, silent = true, desc = 'Load Session' })
+keymap("n", "<leader>e", function() require('mini.files').open(vim.api.nvim_buf_get_name(0)) end, { noremap = true, silent = true, desc = 'Find Manually' })
+keymap("n", "<leader><space>", function() require('mini.pick').builtin.buffers() end, { noremap = true, silent = true, desc = 'Find Buffer' })
+keymap("n", "\'", function() require('mini.extra').pickers.commands() end, { noremap = true, silent = true, desc = 'Find Command' })
+keymap("n", "//", function() require('mini.pick').builtin.grep_live() end, { noremap = true, silent = true, desc = 'Find String' })
+keymap("n", ",", function() require('mini.pick').builtin.files() end, { noremap = true, silent = true, desc = 'Find File' })
+keymap("n", "|", function() require('mini.pick').registry.registry() end, { noremap = true, silent = true, desc = 'Find Picker' })
+keymap("n", "<leader>s", function() require('mini.extra').pickers.git_hunks() end, { noremap = true, silent = true, desc = 'Git Status' })
+keymap("n", "<leader>C", pick_colorscheme, { noremap = true, silent = true, desc = 'Find Colorscheme' })
+keymap("n", "<leader>?", function() require('mini.pick').builtin.help() end, { noremap = true, silent = true, desc = 'Find Help' })
 
 -- ╔═══════════════════════╗
 -- ║    Editing Keymaps    ║
@@ -121,36 +78,29 @@ if vim.tbl_isempty(vim.lsp.buf_get_clients()) then
 else
     keymap("n", "<leader>bf", "gg=G<C-o>", { noremap = true, silent = true, desc = 'Format Buffer' })
 end
+keymap("n", "<C-s>", ":noa wa<cr>", { noremap = true, silent = true, desc = "Save" })
+keymap("n", "<C-q>", ":noa wqa<cr>", { noremap = true, silent = true, desc = "Exit" })
 
 -- ╔═══════════════════╗
 -- ║    Git Keymaps    ║
 -- ╚═══════════════════╝
-keymap("n", "<leader>gb", function() require('mini.extra').pickers.git_commits({ path = vim.fn.expand('%:p') }) end,
-    { desc = 'Git Log this File' })
-keymap("n", "<leader>gl", function()
-    split_sensibly()
-    vim.cmd('terminal lazygit')
-end, { noremap = true, silent = true, desc = 'Lazygit' })
-keymap("n", "<leader>gp", "<cmd>:Git pull<cr>", { noremap = true, silent = true, desc = 'Git Push' })
-keymap("n", "<leader>gs", "<cmd>:Git push<cr>", { noremap = true, silent = true, desc = 'Git Pull' })
-keymap("n", "<leader>ga", "<cmd>:Git add .<cr>", { noremap = true, silent = true, desc = 'Git Add All' })
-keymap("n", "<leader>gc", '<cmd>:Git commit -m "Autocommit from MVIM"<cr>',
-    { noremap = true, silent = true, desc = 'Git Autocommit' })
-keymap("", "<leader>gh", function() require('mini.git').show_range_history() end,
-    { noremap = true, silent = true, desc = 'Git Range History' })
-keymap("n", "<leader>gx", function() require('mini.git').show_at_cursor() end,
-    { noremap = true, silent = true, desc = 'Git Context Cursor' })
+keymap("n", "<leader>gb", function() require('mini.extra').pickers.git_commits({ path = vim.fn.expand('%:p') }) end, { desc = 'Git Log this File' })
+keymap("n", "<leader>gg", ":terminal lazygit<cr>", { noremap = true, silent = true, desc = 'Lazygit' })
+keymap("n", "<leader>gp", ":Git pull<cr>", { noremap = true, silent = true, desc = 'Git Push' })
+keymap("n", "<leader>gs", ":Git push<cr>", { noremap = true, silent = true, desc = 'Git Pull' })
+keymap("n", "<leader>ga", ":Git add .<cr>", { noremap = true, silent = true, desc = 'Git Add All' })
+keymap("n", "<leader>gc", ':Git commit -m "Autocommit from MVIM"<cr>', { noremap = true, silent = true, desc = 'Git Autocommit' })
+keymap("n", "<leader>gh", function() require('mini.git').show_range_history() end, { noremap = true, silent = true, desc = 'Git Range History' })
+keymap("n", "<leader>gx", function() require('mini.git').show_at_cursor() end, { noremap = true, silent = true, desc = 'Git Context Cursor' })
 
 -- ╔═══════════════════╗
 -- ║    LSP Keymaps    ║
 -- ╚═══════════════════╝
-keymap("n", "<leader>ld", function() vim.lsp.buf.definition() end,
-    { noremap = true, silent = true, desc = 'Go To Definition' })
-keymap("n", "<leader>ls", "<cmd>Pick lsp scope='document_symbol'<cr>",
-    { noremap = true, silent = true, desc = 'Show all Symbols' })
+keymap("n", "gR", function() require('mini.extra').pickers.lsp({ scope = 'references' }) end, { noremap = true, silent = true, desc = 'Go To Definition' })
+keymap("n", "gd", function() vim.lsp.buf.definition() end, { noremap = true, silent = true, desc = 'Go To Definition' })
+keymap("n", "<leader>ls", "<cmd>Pick lsp scope='document_symbol'<cr>", { noremap = true, silent = true, desc = 'Show all Symbols' })
 keymap("n", "<leader>lr", function() vim.lsp.buf.rename() end, { noremap = true, silent = true, desc = 'Rename This' })
-keymap("n", "<leader>la", function() vim.lsp.buf.code_action() end,
-    { noremap = true, silent = true, desc = 'Code Actions' })
+keymap("n", "<leader>la", function() vim.lsp.buf.code_action() end, { noremap = true, silent = true, desc = 'Code Actions' })
 
 -- ╔══════════════════╗
 -- ║    UI Keymaps    ║

@@ -18,29 +18,53 @@ require('mini.deps').setup({ path = { package = path_package } })
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 
 now(function()
-    vim.g.mapleader      = ' '
+    vim.g.mapleader      = "\\"
     vim.o.backup         = false
-    vim.o.number         = true
-    vim.o.relativenumber = true
+    vim.o.writebackup    = false
+    vim.o.undofile       = true
+    vim.o.mouse          = 'a'
+    vim.o.cursorline     = true
+    vim.o.cursorlineopt  = "number"
+    vim.o.foldmethod     = "indent"
+    vim.o.foldexpr       = "v:lua.vim.treesitter.foldexpr()"
+    vim.o.foldlevel      = 99
     vim.o.laststatus     = 2
     vim.o.list           = true
-    vim.o.background     = 'dark'
+    vim.o.ruler          = false
+    vim.o.signcolumn     = 'yes'
+    vim.o.splitbelow     = true
+    vim.o.splitright     = true
+    vim.o.termguicolors  = true
+    vim.o.background     = 'light'
     vim.o.listchars      = table.concat({ 'extends:…', 'nbsp:␣', 'precedes:…', 'tab:> ' }, ',')
+    vim.o.fillchars      = table.concat(
+        { 'eob: ', 'fold:╌', 'horiz:═', 'horizdown:╦', 'horizup:╩', 'vert:║', 'verthoriz:╬', 'vertleft:╣', 'vertright:╠' },
+        ','
+    )
+    vim.o.smartindent    = true
     vim.o.autoindent     = true
+    vim.o.formatoptions  = 'rqnl1j'
     vim.o.shiftwidth     = 4
     vim.o.tabstop        = 4
     vim.o.expandtab      = true
+    vim.o.number         = true
+    vim.o.relativenumber = false
+    vim.o.ignorecase     = true
+    vim.o.incsearch      = true
+    vim.o.inccommand     = "split"
+    vim.o.infercase      = true
     vim.o.scrolloff      = 10
     vim.o.clipboard      = "unnamed,unnamedplus"
-    -- vim.opt.statuscolumn = '%=%{v:lnum}│%{v:relnum}'
-    vim.opt.iskeyword:append('-')
-    vim.o.spelllang    = 'de,en'
-    vim.o.spelloptions = 'camel'
+    vim.o.spelllang      = 'en'
+    vim.o.spelloptions   = 'camel'
+    vim.o.swapfile       = false
     vim.opt.complete:append('kspell')
+    vim.opt.iskeyword:append('-')
+    -- vim.opt.statuscolumn = '%=%{v:lnum}│%{v:relnum}'
 
 
     vim.cmd('filetype plugin indent on')
-    -- vim.cmd('colorscheme modus-tinted')
+    vim.cmd('colorscheme catppuccin')
 end)
 
 if vim.g.neovide then
@@ -161,6 +185,7 @@ later(function()
             function() MiniClue.gen_clues.z() end,
         },
         window = {
+            config = { anchor = 'NE', row = 'auto', col = 'auto' },
             delay = 300
         }
     })
@@ -175,7 +200,10 @@ later(function()
         window = {
             info = { border = 'rounded' },
             signature = { border = 'rounded' },
-        }
+        },
+        lsp_completion = {
+            process_items = require('mini.fuzzy').process_lsp_items,
+        },
     })
 end)
 later(function() require('mini.cursorword').setup() end)
@@ -189,11 +217,15 @@ later(function()
 end)
 later(function() require('mini.doc').setup() end)
 later(function() require('mini.extra').setup() end)
+later(function() require('mini.git').setup() end)
 later(function()
     require('mini.files').setup({
         windows = {
             preview = true,
             width_preview = 80,
+        },
+        mappings = {
+            go_in_plus = "<enter>",
         }
     })
 end)
@@ -271,14 +303,14 @@ end)
 -- We disable this, as we use our own Colorscheme through mini.colors
 -- You can enable this by uncommenting
 -- We Provide a Modus Vivendi inspired setup here
-later(function()
-    require('mini.hues').setup({
-        background = '#212030',
-        foreground = '#c6c6cd',
-        accent     = 'cyan',
-        saturation = 'medium'
-    })
-end)
+-- later(function()
+--     require('mini.hues').setup({
+--         background = '#212030',
+--         foreground = '#c6c6cd',
+--         accent     = 'cyan',
+--         saturation = 'medium'
+--     })
+-- end)
 
 later(function()
     require('mini.indentscope').setup({
@@ -305,7 +337,8 @@ later(function()
         content = { sort = filterout_lua_diagnosing },
         window = { config = { border = 'double' } },
     })
-    -- vim.notify = MiniNotify.make_notify()
+    vim.notify = MiniNotify.make_notify()
+    print = MiniNotify.make_notify()
 end)
 later(function() require('mini.operators').setup() end)
 later(function() require('mini.pairs').setup() end)
@@ -351,14 +384,13 @@ now(function()
             require('mini.starter').sections.sessions(5, true),
         },
         header = [[
-                ███╗   ███╗██╗   ██╗██╗███╗   ███╗
-                ████╗ ████║██║   ██║██║████╗ ████║
-                ██╔████╔██║██║   ██║██║██╔████╔██║
-                ██║╚██╔╝██║╚██╗ ██╔╝██║██║╚██╔╝██║
-                ██║ ╚═╝ ██║ ╚████╔╝ ██║██║ ╚═╝ ██║
-                ██║     ██║  ╚═══╝  ╚═╝██║     ██║
-                ██║     ██║ini      nvi██║     ██║
-                ╚═╝     ╚═╝            ╚═╝     ╚═╝]],
+            ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗
+            ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║
+            ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║
+            ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║
+            ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║
+            ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝
+                                                               ]]
     })
 end)
 later(function()
@@ -381,11 +413,10 @@ later(function()
     })
     require('mason').setup()
     require('mason-lspconfig').setup()
-    require('lspconfig').pyright.setup {}
-    require('lspconfig').ruff.setup {}
-    require('lspconfig').ruff_lsp.setup {}
-    require('lspconfig').cssls.setup {}
-    require('lspconfig').bashls.setup {}
+    require('lspconfig').pyright.setup{}
+    require('lspconfig').clangd.setup {}
+    require('lspconfig').gopls.setup {}
+    require('lspconfig').rust_analyzer.setup {}
     require('lspconfig').lua_ls.setup {
         settings = {
             Lua = {
@@ -419,6 +450,7 @@ later(function()
         },
     }
     require('lspconfig').yamlls.setup {}
+    require('lspconfig').pyright.setup {}
 end)
 
 later(function()
@@ -435,9 +467,22 @@ end)
 
 later(function()
     add({
-        source = 'ibhagwan/fzf-lua'
+        source = 'supermaven-inc/supermaven-nvim',
     })
-    require('fzf-lua').setup({})
+    require('supermaven-nvim').setup({})
+end)
+
+-- mini pick pickers + registry
+later(function()
+    MiniPick.registry.registry = function()
+        local items = vim.tbl_extend("force", vim.tbl_keys(MiniExtra.pickers), vim.tbl_keys(MiniPick.registry))
+        local source = { items = items, name = 'Registry', choose = function() end }
+        local chosen_picker_name = MiniPick.start({ source = source })
+        if chosen_picker_name == nil then return end
+        local picker = MiniExtra.pickers[chosen_picker_name]
+        if picker == nil then picker = MiniPick.registry[chosen_picker_name] end
+        picker()
+    end
 end)
 
 require("autocmds")

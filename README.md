@@ -11,7 +11,7 @@ Additionaly, I was getting tired of maintaining a Configuration with as many plu
 
 ## Dependencies
 This configuration should mostly work on it's own without anything else. To get it you need git (obviously).
-I have provided a keymap for lazygit (`<leader>gl`), so you should install this if you want to use that.
+I have provided a keymap for lazygit (`<leader>gg`), so you should install this if you want to use that.
 I'm not going to go over how to get the tools you need to install LSPs. Others have done that much better already.
 
 ## Things to configure
@@ -27,7 +27,8 @@ The basic gist is, that you need to manually install your prefered LSPs through 
 I'll add a more detailed description later.
 
 ## Colorschemes
-Mini.nvim provieds two different option to set up a colorscheme:
+Mini.nvim provides three different option to set up a colorscheme:
+- mini.colors
 - mini.hues
 - mini.base16
 Per default we use mini.base16 with our own colorscheme, inspired by the emacs modus themes by protesilaos.
