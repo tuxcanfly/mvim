@@ -50,7 +50,7 @@ keymap("n", "<leader>fh", function() MiniPick.builtin.help() end, { noremap = tr
 keymap("n", "<leader>fl", function() MiniExtra.pickers.hl_groups() end,
     { noremap = true, silent = true, desc = 'Find HL Groups' })
 keymap("n", "<leader>fc", pick_colorscheme, { noremap = true, silent = true, desc = 'Change Colorscheme' })
-keymap('n', ',', function() MiniExtra.pickers.buf_lines({scope='current'}) end, { nowait = true })
+keymap('n', ',', function() MiniExtra.pickers.buf_lines({ scope = 'current' }) end, { nowait = true })
 
 -- Session Related Keymaps
 keymap("n", "<leader>ss", function()
@@ -82,6 +82,7 @@ keymap("n", "<C-h>", "<cmd>bprevious<cr>", { silent = true, desc = 'Previous Buf
 keymap("n", "<leader>k", "<C-^>", { noremap = true, silent = true, desc = "Alternate buffers" })
 
 -- Git Related Keymaps
+keymap("n", "<leader>gb", function() MiniExtra.pickers.git_commits({ path = vim.fn.expand('%:p') }) end, { desc = 'Git Log this File' })
 keymap("n", "<leader>gl", "<cmd>terminal lazygit<cr>", { noremap = true, silent = true, desc = 'Lazygit' })
 keymap("n", "<leader>gp", "<cmd>terminal git pull<cr>", { noremap = true, silent = true, desc = 'Git Push' })
 keymap("n", "<leader>gs", "<cmd>terminal git push<cr>", { noremap = true, silent = true, desc = 'Git Pull' })

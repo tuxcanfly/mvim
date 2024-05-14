@@ -21,7 +21,7 @@ now(function()
     vim.g.mapleader      = " "
     vim.o.backup         = false
     vim.o.writebackup    = false
-vim.o.undofile       = true
+    vim.o.undofile       = true
     vim.o.mouse          = 'a'
     vim.o.cursorline     = true
     vim.o.laststatus     = 2
@@ -58,6 +58,10 @@ vim.o.undofile       = true
     vim.cmd('filetype plugin indent on')
     vim.cmd('colorscheme modus-tinted')
 end)
+
+if vim.g.neovide then
+    vim.o.guifont = "JetBrainsMono Nerd Font:h10"
+end
 
 later(function() require('mini.ai').setup() end)
 later(function() require('mini.align').setup() end)
@@ -172,6 +176,9 @@ later(function() require('mini.colors').setup() end)
 later(function() require('mini.comment').setup() end)
 later(function()
     require('mini.completion').setup({
+        mappings = {
+            go_in = '<RET>',
+        },
         window = {
             info = { border = 'rounded' },
             signature = { border = 'rounded' },
@@ -208,6 +215,7 @@ now(function()
         pattern = {
             'password: ()%S+()',
             'password_usr: ()%S+()',
+            '.*_pw: ()%S+()',
         },
         group = '',
         extmark_opts = censor_extmark_opts
