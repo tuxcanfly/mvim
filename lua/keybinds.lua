@@ -50,6 +50,7 @@ keymap("n", "<leader>fh", function() MiniPick.builtin.help() end, { noremap = tr
 keymap("n", "<leader>fl", function() MiniExtra.pickers.hl_groups() end,
     { noremap = true, silent = true, desc = 'Find HL Groups' })
 keymap("n", "<leader>fc", pick_colorscheme, { noremap = true, silent = true, desc = 'Change Colorscheme' })
+keymap('n', ',', function() MiniExtra.pickers.buf_lines({scope='current'}) end, { nowait = true })
 
 -- Session Related Keymaps
 keymap("n", "<leader>ss", function()
