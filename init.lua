@@ -21,7 +21,7 @@ now(function()
     vim.g.mapleader      = " "
     vim.o.backup         = false
     vim.o.writebackup    = false
-    vim.o.undofile       = true
+vim.o.undofile       = true
     vim.o.mouse          = 'a'
     vim.o.cursorline     = true
     vim.o.laststatus     = 2
@@ -56,7 +56,7 @@ now(function()
     vim.opt.complete:append('kspell')
 
     vim.cmd('filetype plugin indent on')
-    vim.cmd('colorscheme randomhue')
+    vim.cmd('colorscheme modus-tinted')
 end)
 
 later(function() require('mini.ai').setup() end)
@@ -353,15 +353,15 @@ later(function()
         }
     }
     require('lspconfig').ansiblels.setup {}
-    -- require('lspconfig').yamlls.setup {}
+    require('lspconfig').yamlls.setup {}
 end)
 
-later(function()
-  add({
-      source = 'nvim-treesitter/nvim-treesitter'
-  })
-   require('nvim-treesitter.configs').setup({})
-end)
+-- later(function()
+--   add({
+--       source = 'nvim-treesitter/nvim-treesitter'
+--   })
+--    require('nvim-treesitter.configs').setup({})
+-- end)
 
 require("autocmds")
 require("filetypes")
