@@ -220,6 +220,24 @@ now(function()
         group = '',
         extmark_opts = censor_extmark_opts
     }
+    -- TODO Make the "mask" Text a variale based on the match
+    local mattern_extmark_opts = function(_, match, _)
+        local mask = 'Rollout new Backup'
+        return {
+            virt_text = { { mask, 'FoldColumn' } },
+            virt_text_pos = 'eol',
+            priority = 199,
+            right_gravity = true,
+        }
+    end
+
+    local mattern_table = {
+        pattern = {
+            '.*backup_path:'
+        },
+        group = '',
+        extmark_opts = mattern_extmark_opts
+    }
 
     hipatterns.setup({
         highlighters = {
@@ -231,6 +249,7 @@ now(function()
 
             -- Cloaking Passwords
             pw        = password_table,
+            mattern   = mattern_table,
 
             -- Highlight hex color strings (`#rrggbb`) using that color
             hex_color = hipatterns.gen_highlighter.hex_color(),
