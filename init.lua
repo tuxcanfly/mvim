@@ -198,6 +198,7 @@ later(function()
     })
 end)
 later(function() require('mini.fuzzy').setup() end)
+later(function() require('mini.git').setup() end)
 now(function()
     local hipatterns = require('mini.hipatterns')
 

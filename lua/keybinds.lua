@@ -104,11 +104,13 @@ end
 keymap("n", "<leader>gb", function() MiniExtra.pickers.git_commits({ path = vim.fn.expand('%:p') }) end,
     { desc = 'Git Log this File' })
 keymap("n", "<leader>gl", "<cmd>terminal lazygit<cr>", { noremap = true, silent = true, desc = 'Lazygit' })
-keymap("n", "<leader>gp", "<cmd>terminal git pull<cr>", { noremap = true, silent = true, desc = 'Git Push' })
-keymap("n", "<leader>gs", "<cmd>terminal git push<cr>", { noremap = true, silent = true, desc = 'Git Pull' })
-keymap("n", "<leader>ga", "<cmd>terminal git add .<cr>", { noremap = true, silent = true, desc = 'Git Add All' })
-keymap("n", "<leader>gc", '<cmd>terminal git commit -m "Autocommit from MVIM"<cr>',
+keymap("n", "<leader>gp", "<cmd>:Git git pull<cr>", { noremap = true, silent = true, desc = 'Git Push' })
+keymap("n", "<leader>gs", "<cmd>:Git git push<cr>", { noremap = true, silent = true, desc = 'Git Pull' })
+keymap("n", "<leader>ga", "<cmd>:Git git add .<cr>", { noremap = true, silent = true, desc = 'Git Add All' })
+keymap("n", "<leader>gc", '<cmd>:Git git commit -m "Autocommit from MVIM"<cr>',
     { noremap = true, silent = true, desc = 'Git Autocommit' })
+keymap("n", "<leader>gh", function() require('mini.git').show_range_history() end, { noremap = true, silent = true, desc = 'Git Range History' })
+keymap("n", "<leader>gx", function() require('mini.git').show_at_cursor() end, { noremap = true, silent = true, desc = 'Git Context Cursor' })
 
 -- ╔═══════════════════╗
 -- ║    LSP Keymaps    ║
