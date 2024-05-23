@@ -60,7 +60,7 @@ now(function()
 end)
 
 if vim.g.neovide then
-    vim.o.guifont = "JetBrainsMono Nerd Font:h10"
+    vim.o.guifont = "FiraCode Nerd Font:h10"
 end
 
 later(function() require('mini.ai').setup() end)
@@ -107,7 +107,7 @@ end)
 later(function()
     require('mini.basics').setup({
         options = {
-            extra_ui = true,
+            extra_ui = false,
             win_borders = 'rounded',
         },
         mappings = {
@@ -217,6 +217,7 @@ now(function()
             'password: ()%S+()',
             'password_usr: ()%S+()',
             '.*_pw: ()%S+()',
+            '.*password: ()%S+()',
         },
         group = '',
         extmark_opts = censor_extmark_opts
@@ -380,16 +381,43 @@ later(function()
             }
         }
     }
-    require('lspconfig').ansiblels.setup {}
+    require('lspconfig').ansiblels.setup {
+        root_dir = require('lspconfig').util.root_pattern('ansible.cfg', '.ansible-lint'),
+        settings = {
+            ansible = {
+                python = {
+                    interpreterPath = 'python',
+                },
+                ansible = {
+                    path = 'ansible',
+                },
+                executionEnvironment = {
+                    enabled = false,
+                },
+                validation = {
+                    enabled = true,
+                    lint = {
+                        enabled = true,
+                        path = 'ansible-lint',
+                    },
+                },
+            },
+        },
+    }
     require('lspconfig').yamlls.setup {}
 end)
 
--- later(function()
---   add({
---       source = 'nvim-treesitter/nvim-treesitter'
---   })
---    require('nvim-treesitter.configs').setup({})
--- end)
+later(function()
+    add({
+        source = 'nvim-treesitter/nvim-treesitter'
+    })
+    require('nvim-treesitter.configs').setup({
+        ensure_installed = { 'lua', 'yaml' },
+        auto_install = true,
+        highlight = { enable = true, disable = { 'ini' } },
+        indent = { enable = true }
+    })
+end)
 
 require("autocmds")
 require("filetypes")

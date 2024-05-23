@@ -7,6 +7,14 @@ local MiniFiles = require('mini.files')
 local MiniSessions = require('mini.sessions')
 local MiniExtra = require('mini.extra')
 
+local split_sensibly = function()
+    if vim.api.nvim_win_get_width(0) > math.floor(vim.api.nvim_win_get_height(0) * 2.3) then
+        vim.cmd("vs")
+    else
+        vim.cmd("split")
+    end
+end
+
 -- MiniPick Colorscheme Picker
 local set_colorscheme = function(name) pcall(vim.cmd, 'colorscheme ' .. name) end
 local pick_colorscheme = function()
@@ -93,7 +101,8 @@ keymap("n", "<TAB>", "<C-^>", { noremap = true, silent = true, desc = "Alternate
 -- Format Buffer
 -- With and without LSP
 if vim.tbl_isempty(vim.lsp.buf_get_clients()) then
-    keymap("n", "<leader>bf", function() vim.lsp.buf.format() end,{ noremap = true, silent = true, desc = 'Format Buffer' })
+    keymap("n", "<leader>bf", function() vim.lsp.buf.format() end,
+        { noremap = true, silent = true, desc = 'Format Buffer' })
 else
     keymap("n", "<leader>bf", "gg=G<C-o>", { noremap = true, silent = true, desc = 'Format Buffer' })
 end
@@ -103,14 +112,19 @@ end
 -- ╚═══════════════════╝
 keymap("n", "<leader>gb", function() MiniExtra.pickers.git_commits({ path = vim.fn.expand('%:p') }) end,
     { desc = 'Git Log this File' })
-keymap("n", "<leader>gl", "<cmd>terminal lazygit<cr>", { noremap = true, silent = true, desc = 'Lazygit' })
+keymap("n", "<leader>gl", function()
+    split_sensibly()
+    vim.cmd('terminal lazygit')
+end, { noremap = true, silent = true, desc = 'Lazygit' })
 keymap("n", "<leader>gp", "<cmd>:Git git pull<cr>", { noremap = true, silent = true, desc = 'Git Push' })
 keymap("n", "<leader>gs", "<cmd>:Git git push<cr>", { noremap = true, silent = true, desc = 'Git Pull' })
 keymap("n", "<leader>ga", "<cmd>:Git git add .<cr>", { noremap = true, silent = true, desc = 'Git Add All' })
 keymap("n", "<leader>gc", '<cmd>:Git git commit -m "Autocommit from MVIM"<cr>',
     { noremap = true, silent = true, desc = 'Git Autocommit' })
-keymap("n", "<leader>gh", function() require('mini.git').show_range_history() end, { noremap = true, silent = true, desc = 'Git Range History' })
-keymap("n", "<leader>gx", function() require('mini.git').show_at_cursor() end, { noremap = true, silent = true, desc = 'Git Context Cursor' })
+keymap("n", "<leader>gh", function() require('mini.git').show_range_history() end,
+    { noremap = true, silent = true, desc = 'Git Range History' })
+keymap("n", "<leader>gx", function() require('mini.git').show_at_cursor() end,
+    { noremap = true, silent = true, desc = 'Git Context Cursor' })
 
 -- ╔═══════════════════╗
 -- ║    LSP Keymaps    ║
@@ -132,13 +146,17 @@ keymap("n", "<leader>wk", "<cmd>wincmd k<cr>", { noremap = true, silent = true, 
 keymap("n", "<leader>wj", "<cmd>wincmd j<cr>", { noremap = true, silent = true, desc = 'Focus Down' })
 keymap("n", "<leader>wh", "<cmd>wincmd h<cr>", { noremap = true, silent = true, desc = 'Focus Right' })
 -- Alternate Window Navigation
-keymap("n", "<C-A-S-l>", "<C-w>l", { noremap = true, silent = true, desc = 'Focus Left' })
-keymap("n", "<C-A-S-k>", "<C-w>k", { noremap = true, silent = true, desc = 'Focus Up' })
-keymap("n", "<C-A-S-j>", "<C-w>j", { noremap = true, silent = true, desc = 'Focus Down' })
-keymap("n", "<C-A-S-h>", "<C-w>h", { noremap = true, silent = true, desc = 'Focus Right' })
+keymap('n', '<S-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
+keymap('n', '<S-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
+keymap('n', '<S-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
+keymap('n', '<S-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
 keymap("n", "<leader>wq", "<cmd>wincmd q<cr>", { noremap = true, silent = true, desc = 'Close Window' })
 keymap("n", "<leader>n", "<cmd>noh<cr>", { noremap = true, silent = true, desc = 'Clear Search Highlight' })
+
+-- Split "Sensibly"
+-- Should automatically split or vsplit based on Ratios
+keymap("n", "<leader>bs", split_sensibly, { noremap = true, silent = true, desc = "Alternate buffers" })
 
 -- Change Colorscheme
 keymap("n", "<leader>ud", "<cmd>set background=dark<cr>", { noremap = true, silent = true, desc = 'Dark Background' })
