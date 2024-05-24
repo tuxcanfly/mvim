@@ -18,45 +18,28 @@ require('mini.deps').setup({ path = { package = path_package } })
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 
 now(function()
-    vim.g.mapleader      = " "
-    vim.o.backup         = false
-    vim.o.writebackup    = false
-    vim.o.undofile       = true
-    vim.o.mouse          = 'a'
-    vim.o.cursorline     = true
-    vim.o.laststatus     = 2
-    vim.o.list           = true
-    vim.o.ruler          = false
-    vim.o.signcolumn     = 'yes'
-    vim.o.splitbelow     = true
-    vim.o.splitright     = true
-    vim.o.termguicolors  = true
-    vim.o.background     = 'dark'
-    vim.o.listchars      = table.concat({ 'extends:…', 'nbsp:␣', 'precedes:…', 'tab:> ' }, ',')
-    vim.o.fillchars      = table.concat(
-        { 'eob: ', 'fold:╌', 'horiz:═', 'horizdown:╦', 'horizup:╩', 'vert:║', 'verthoriz:╬', 'vertleft:╣', 'vertright:╠' },
-        ','
-    )
-    vim.o.smartindent    = true
-    vim.o.autoindent     = true
-    vim.o.formatoptions  = 'rqnl1j'
-    vim.o.shiftwidth     = 4
-    vim.o.tabstop        = 4
-    vim.o.expandtab      = true
-    vim.o.relativenumber = true
-    vim.o.ignorecase     = true
-    vim.o.incsearch      = true
-    vim.o.infercase      = true
-    vim.o.scrolloff      = 10
-    vim.o.clipboard      = "unnamed,unnamedplus"
+    vim.g.mapleader  = ' '
+    vim.o.backup     = false
+    vim.o.number     = true
+    vim.o.laststatus = 2
+    vim.o.list       = true
+    vim.o.background = 'dark'
+    vim.o.listchars  = table.concat({ 'extends:…', 'nbsp:␣', 'precedes:…', 'tab:> ' }, ',')
+    vim.o.autoindent = true
+    vim.o.shiftwidth = 4
+    vim.o.tabstop    = 4
+    vim.o.expandtab  = true
+    vim.o.scrolloff  = 10
+    vim.o.clipboard  = "unnamed,unnamedplus"
     -- vim.opt.statuscolumn = '%=%{v:lnum}│%{v:relnum}'
     vim.opt.iskeyword:append('-')
     vim.o.spelllang    = 'de,en'
     vim.o.spelloptions = 'camel'
     vim.opt.complete:append('kspell')
 
+
     vim.cmd('filetype plugin indent on')
-    vim.cmd('colorscheme modus-tinted')
+    -- vim.cmd('colorscheme modus-tinted')
 end)
 
 if vim.g.neovide then
@@ -107,11 +90,17 @@ end)
 later(function()
     require('mini.basics').setup({
         options = {
-            extra_ui = false,
-            win_borders = 'rounded',
+            basic = true,
+            extra_ui = true,
+            win_borders = 'bold',
         },
         mappings = {
+            basic = true,
             windows = true,
+        },
+        autocommands = {
+            basic = true,
+            relnum_in_visual_mode = true,
         }
     })
 end)
@@ -123,6 +112,9 @@ later(function()
             -- Leader triggers
             { mode = 'n', keys = '<Leader>' },
             { mode = 'x', keys = '<Leader>' },
+
+            { mode = 'n', keys = '\\' },
+
             -- Built-in completion
             { mode = 'i', keys = '<C-x>' },
 
@@ -172,7 +164,7 @@ later(function()
         }
     })
 end)
-later(function() require('mini.colors').setup() end)
+-- later(function() require('mini.colors').setup() end)
 later(function() require('mini.comment').setup() end)
 later(function()
     require('mini.completion').setup({
@@ -186,7 +178,12 @@ later(function()
     })
 end)
 later(function() require('mini.cursorword').setup() end)
-later(function() require('mini.diff').setup() end)
+later(function() require('mini.diff').setup({
+    view = {
+        style = 'sign',
+        signs = { add = '█', change = '▒', delete = ''}
+    }
+}) end)
 later(function() require('mini.doc').setup() end)
 later(function() require('mini.extra').setup() end)
 later(function()
@@ -217,7 +214,8 @@ now(function()
             'password: ()%S+()',
             'password_usr: ()%S+()',
             '.*_pw: ()%S+()',
-            '.*password: ()%S+()',
+            'password_.*: ()%S+()',
+            'gpg_pass: ()%S+()',
         },
         group = '',
         extmark_opts = censor_extmark_opts
@@ -270,7 +268,15 @@ end)
 -- We disable this, as we use our own Colorscheme through mini.colors
 -- You can enable this by uncommenting
 -- We Provide a Modus Vivendi inspired setup here
--- later(function() require('mini.hues').setup({ background = '#0d0e1c', foreground = '#feacd0' }) end)
+later(function()
+    require('mini.hues').setup({
+        background = '#212030',
+        foreground = '#c6c6cd',
+        accent     = 'cyan',
+        saturation = 'medium'
+    })
+end)
+
 later(function()
     require('mini.indentscope').setup({
         draw = {
@@ -382,7 +388,6 @@ later(function()
         }
     }
     require('lspconfig').ansiblels.setup {
-        root_dir = require('lspconfig').util.root_pattern('ansible.cfg', '.ansible-lint'),
         settings = {
             ansible = {
                 python = {
@@ -399,6 +404,7 @@ later(function()
                     lint = {
                         enabled = true,
                         path = 'ansible-lint',
+                        arguments = '-c /home/dosa/.config/ansible-lint.yml'
                     },
                 },
             },

@@ -95,8 +95,8 @@ keymap("n", "<leader>ip",
 -- ║    Buffer Keymaps    ║
 -- ╚══════════════════════╝
 keymap("n", "<leader>bd", "<cmd>bd<cr>", { noremap = true, silent = true, desc = 'Close Buffer' })
-keymap("n", "<C-l>", "<cmd>bnext<cr>", { silent = true, desc = 'Next Buffer' })
-keymap("n", "<C-h>", "<cmd>bprevious<cr>", { silent = true, desc = 'Previous Buffer' })
+keymap("n", "<S-l>", "<cmd>bnext<cr>", { silent = true, desc = 'Next Buffer' })
+keymap("n", "<S-h>", "<cmd>bprevious<cr>", { silent = true, desc = 'Previous Buffer' })
 keymap("n", "<TAB>", "<C-^>", { noremap = true, silent = true, desc = "Alternate buffers" })
 -- Format Buffer
 -- With and without LSP
@@ -146,10 +146,10 @@ keymap("n", "<leader>wk", "<cmd>wincmd k<cr>", { noremap = true, silent = true, 
 keymap("n", "<leader>wj", "<cmd>wincmd j<cr>", { noremap = true, silent = true, desc = 'Focus Down' })
 keymap("n", "<leader>wh", "<cmd>wincmd h<cr>", { noremap = true, silent = true, desc = 'Focus Right' })
 -- Alternate Window Navigation
-keymap('n', '<S-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
-keymap('n', '<S-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
-keymap('n', '<S-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
-keymap('n', '<S-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+-- keymap('n', '<S-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
+-- keymap('n', '<S-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
+-- keymap('n', '<S-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
+-- keymap('n', '<S-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
 keymap("n", "<leader>wq", "<cmd>wincmd q<cr>", { noremap = true, silent = true, desc = 'Close Window' })
 keymap("n", "<leader>n", "<cmd>noh<cr>", { noremap = true, silent = true, desc = 'Clear Search Highlight' })
