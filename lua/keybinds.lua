@@ -2,10 +2,6 @@
 -- ║    Local Variables    ║
 -- ╚═══════════════════════╝
 local keymap = vim.keymap.set
-local MiniPick = require('mini.pick')
-local MiniFiles = require('mini.files')
-local MiniSessions = require('mini.sessions')
-local MiniExtra = require('mini.extra')
 
 local split_sensibly = function()
     if vim.api.nvim_win_get_width(0) > math.floor(vim.api.nvim_win_get_height(0) * 2.3) then
@@ -15,11 +11,11 @@ local split_sensibly = function()
     end
 end
 
--- MiniPick Colorscheme Picker
+-- require('mini.pick') Colorscheme Picker
 local set_colorscheme = function(name) pcall(vim.cmd, 'colorscheme ' .. name) end
 local pick_colorscheme = function()
     local init_scheme = vim.g.colors_name
-    local new_scheme = MiniPick.start({
+    local new_scheme = require('mini.pick').start({
         source = {
             items = vim.fn.getcompletion("", "color"),
             preview = function(_, item)
@@ -31,7 +27,7 @@ local pick_colorscheme = function()
             preview = {
                 char = '<C-p>',
                 func = function()
-                    local item = MiniPick.get_picker_matches()
+                    local item = require('mini.pick').get_picker_matches()
                     pcall(vim.cmd, 'colorscheme ' .. item.current)
                 end
             }
@@ -49,34 +45,34 @@ keymap("", "ö", ":")
 -- ╔════════════════════╗
 -- ║    Find Keymaps    ║
 -- ╚════════════════════╝
-keymap("n", "<leader>fs", function() MiniPick.builtin.files() end, { noremap = true, silent = true, desc = 'Find File' })
-keymap("n", "<leader>e", function() MiniFiles.open(vim.api.nvim_buf_get_name(0)) end,
+keymap("n", "<leader>fs", function() require('mini.pick').builtin.files() end, { noremap = true, silent = true, desc = 'Find File' })
+keymap("n", "<leader>e", function() require('mini.files').open(vim.api.nvim_buf_get_name(0)) end,
     { noremap = true, silent = true, desc = 'Find Manualy' })
-keymap("n", "<leader><space>", function() MiniPick.builtin.buffers() end,
+keymap("n", "<leader><space>", function() require('mini.pick').builtin.buffers() end,
     { noremap = true, silent = true, desc = 'Find Buffer' })
-keymap("n", "<leader>fg", function() MiniPick.builtin.grep_live() end,
+keymap("n", "<leader>fg", function() require('mini.pick').builtin.grep_live() end,
     { noremap = true, silent = true, desc = 'Find String' })
 keymap("n", "<leader>fwg", function()
         local wrd = vim.fn.expand("<cWORD>")
-        MiniPick.builtin.grep_live({ pattern = wrd })
+        require('mini.pick').builtin.grep_live({ pattern = wrd })
     end,
     { noremap = true, silent = true, desc = 'Find String Cursor' })
-keymap("n", "<leader>fh", function() MiniPick.builtin.help() end, { noremap = true, silent = true, desc = 'Find Help' })
-keymap("n", "<leader>fl", function() MiniExtra.pickers.hl_groups() end,
+keymap("n", "<leader>fh", function() require('mini.pick').builtin.help() end, { noremap = true, silent = true, desc = 'Find Help' })
+keymap("n", "<leader>fl", function() require('mini.extra').pickers.hl_groups() end,
     { noremap = true, silent = true, desc = 'Find HL Groups' })
 keymap("n", "<leader>fc", pick_colorscheme, { noremap = true, silent = true, desc = 'Change Colorscheme' })
-keymap('n', ',', function() MiniExtra.pickers.buf_lines({ scope = 'current' }) end, { nowait = true })
+keymap('n', ',', function() require('mini.extra').pickers.buf_lines({ scope = 'current' }) end, { nowait = true })
 
 -- ╔═══════════════════════╗
 -- ║    Session Keymaps    ║
 -- ╚═══════════════════════╝
 keymap("n", "<leader>ss", function()
     vim.cmd('wa')
-    MiniSessions.write()
-    MiniSessions.select()
+    require('mini.sessions').write()
+    require('mini.sessions').select()
 end, { noremap = true, silent = true, desc = 'Switch Session' })
-keymap("n", "<leader>sw", function() MiniSessions.write() end, { noremap = true, silent = true, desc = 'Save Session' })
-keymap("n", "<leader>sf", function() MiniSessions.select() end, { noremap = true, silent = true, desc = 'Load Session' })
+keymap("n", "<leader>sw", function() require('mini.sessions').write() end, { noremap = true, silent = true, desc = 'Save Session' })
+keymap("n", "<leader>sf", function() require('mini.sessions').select() end, { noremap = true, silent = true, desc = 'Load Session' })
 
 -- ╔═══════════════════════╗
 -- ║    Editing Keymaps    ║
@@ -110,7 +106,7 @@ end
 -- ╔═══════════════════╗
 -- ║    Git Keymaps    ║
 -- ╚═══════════════════╝
-keymap("n", "<leader>gb", function() MiniExtra.pickers.git_commits({ path = vim.fn.expand('%:p') }) end,
+keymap("n", "<leader>gb", function() require('mini.extra').pickers.git_commits({ path = vim.fn.expand('%:p') }) end,
     { desc = 'Git Log this File' })
 keymap("n", "<leader>gl", function()
     split_sensibly()

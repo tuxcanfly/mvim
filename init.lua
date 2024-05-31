@@ -416,7 +416,7 @@ end)
 later(function()
     add({
         source = 'nvim-treesitter/nvim-treesitter'
-    })
+        })
     require('nvim-treesitter.configs').setup({
         ensure_installed = { 'lua', 'yaml' },
         auto_install = true,
