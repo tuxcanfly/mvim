@@ -91,6 +91,7 @@ keymap("n", "<leader>ip",
 -- ║    Buffer Keymaps    ║
 -- ╚══════════════════════╝
 keymap("n", "<leader>bd", "<cmd>bd<cr>", { noremap = true, silent = true, desc = 'Close Buffer' })
+keymap("n", "<leader>bq", "<cmd>%bd|e#<cr>", { noremap = true, silent = true, desc = 'Close other Buffers' })
 keymap("n", "<S-l>", "<cmd>bnext<cr>", { silent = true, desc = 'Next Buffer' })
 keymap("n", "<S-h>", "<cmd>bprevious<cr>", { silent = true, desc = 'Previous Buffer' })
 keymap("n", "<TAB>", "<C-^>", { noremap = true, silent = true, desc = "Alternate buffers" })

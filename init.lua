@@ -378,6 +378,9 @@ later(function()
     })
     require('mason').setup()
     require('mason-lspconfig').setup()
+    require('lspconfig').pyright.setup{}
+    require('lspconfig').ruff.setup{}
+    require('lspconfig').ruff_lsp.setup{}
     require('lspconfig').lua_ls.setup {
         settings = {
             Lua = {
