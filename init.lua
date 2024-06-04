@@ -18,19 +18,20 @@ require('mini.deps').setup({ path = { package = path_package } })
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 
 now(function()
-    vim.g.mapleader  = ' '
-    vim.o.backup     = false
-    vim.o.number     = true
-    vim.o.laststatus = 2
-    vim.o.list       = true
-    vim.o.background = 'dark'
-    vim.o.listchars  = table.concat({ 'extends:…', 'nbsp:␣', 'precedes:…', 'tab:> ' }, ',')
-    vim.o.autoindent = true
-    vim.o.shiftwidth = 4
-    vim.o.tabstop    = 4
-    vim.o.expandtab  = true
-    vim.o.scrolloff  = 10
-    vim.o.clipboard  = "unnamed,unnamedplus"
+    vim.g.mapleader      = ' '
+    vim.o.backup         = false
+    vim.o.number         = true
+    vim.o.relativenumber = true
+    vim.o.laststatus     = 2
+    vim.o.list           = true
+    vim.o.background     = 'dark'
+    vim.o.listchars      = table.concat({ 'extends:…', 'nbsp:␣', 'precedes:…', 'tab:> ' }, ',')
+    vim.o.autoindent     = true
+    vim.o.shiftwidth     = 4
+    vim.o.tabstop        = 4
+    vim.o.expandtab      = true
+    vim.o.scrolloff      = 10
+    vim.o.clipboard      = "unnamed,unnamedplus"
     -- vim.opt.statuscolumn = '%=%{v:lnum}│%{v:relnum}'
     vim.opt.iskeyword:append('-')
     vim.o.spelllang    = 'de,en'
@@ -178,12 +179,14 @@ later(function()
     })
 end)
 later(function() require('mini.cursorword').setup() end)
-later(function() require('mini.diff').setup({
-    view = {
-        style = 'sign',
-        signs = { add = '█', change = '▒', delete = ''}
-    }
-}) end)
+later(function()
+    require('mini.diff').setup({
+        view = {
+            style = 'sign',
+            signs = { add = '█', change = '▒', delete = '' }
+        }
+    })
+end)
 later(function() require('mini.doc').setup() end)
 later(function() require('mini.extra').setup() end)
 later(function()
@@ -378,9 +381,9 @@ later(function()
     })
     require('mason').setup()
     require('mason-lspconfig').setup()
-    require('lspconfig').pyright.setup{}
-    require('lspconfig').ruff.setup{}
-    require('lspconfig').ruff_lsp.setup{}
+    require('lspconfig').pyright.setup {}
+    require('lspconfig').ruff.setup {}
+    require('lspconfig').ruff_lsp.setup {}
     require('lspconfig').lua_ls.setup {
         settings = {
             Lua = {
@@ -419,7 +422,7 @@ end)
 later(function()
     add({
         source = 'nvim-treesitter/nvim-treesitter'
-        })
+    })
     require('nvim-treesitter.configs').setup({
         ensure_installed = { 'lua', 'yaml' },
         auto_install = true,
