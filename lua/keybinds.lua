@@ -71,7 +71,11 @@ keymap("n", "<leader>ss", function()
     require('mini.sessions').write()
     require('mini.sessions').select()
 end, { noremap = true, silent = true, desc = 'Switch Session' })
-keymap("n", "<leader>sw", function() require('mini.sessions').write() end, { noremap = true, silent = true, desc = 'Save Session' })
+keymap("n", "<leader>sw", function()
+    local cwd = vim.fn.getcwd()
+    local last_folder = cwd:match("([^/]+)$")
+    require('mini.sessions').write(last_folder)
+end, { noremap = true, silent = true, desc = 'Save Session' })
 keymap("n", "<leader>sf", function() require('mini.sessions').select() end, { noremap = true, silent = true, desc = 'Load Session' })
 
 -- ╔═══════════════════════╗
