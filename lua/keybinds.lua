@@ -45,13 +45,22 @@ keymap("", "ö", ":")
 -- ╔════════════════════╗
 -- ║    Find Keymaps    ║
 -- ╚════════════════════╝
-keymap("n", "<leader>fs", function() require('mini.pick').builtin.files() end, { noremap = true, silent = true, desc = 'Find File' })
-keymap("n", "<leader>fa", function() require('mini.pick').builtin.resume() end, { noremap = true, silent = true, desc = 'Find File' })
-keymap("n", "<leader>e", function() require('mini.files').open(vim.api.nvim_buf_get_name(0)) end,
+keymap("n", "<leader>fs", function() require('mini.pick').builtin.files() end,
+    { noremap = true, silent = true, desc = 'Find File' })
+keymap("n", "<leader>fa", function() require('mini.pick').builtin.resume() end,
+    { noremap = true, silent = true, desc = 'Find File' })
+keymap("n", "<leader>e", function()
+        local buffer_name = vim.api.nvim_buf_get_name(0)
+        if buffer_name == "" or string.match(buffer_name, "Starter") then
+            require('mini.files').open(vim.loop.cwd())
+        else
+            require('mini.files').open(vim.api.nvim_buf_get_name(0))
+        end
+    end,
     { noremap = true, silent = true, desc = 'Find Manualy' })
 keymap("n", "<leader><space>", function() require('mini.pick').builtin.buffers() end,
     { noremap = true, silent = true, desc = 'Find Buffer' })
-keymap("n", "<leader>fG", function() require('mini.pick').builtin.grep_live() end,
+keymap("n", "<leader>fg", function() require('mini.pick').builtin.grep_live() end,
     { noremap = true, silent = true, desc = 'Find String' })
 keymap("n", "<leader>fg", function() require('fzf-lua').live_grep() end,
     { noremap = true, silent = true, desc = 'Find String' })
@@ -60,7 +69,8 @@ keymap("n", "<leader>fwg", function()
         require('mini.pick').builtin.grep_live({ pattern = wrd })
     end,
     { noremap = true, silent = true, desc = 'Find String Cursor' })
-keymap("n", "<leader>fh", function() require('mini.pick').builtin.help() end, { noremap = true, silent = true, desc = 'Find Help' })
+keymap("n", "<leader>fh", function() require('mini.pick').builtin.help() end,
+    { noremap = true, silent = true, desc = 'Find Help' })
 keymap("n", "<leader>fl", function() require('mini.extra').pickers.hl_groups() end,
     { noremap = true, silent = true, desc = 'Find HL Groups' })
 keymap("n", "<leader>fc", pick_colorscheme, { noremap = true, silent = true, desc = 'Change Colorscheme' })
@@ -79,7 +89,8 @@ keymap("n", "<leader>sw", function()
     local last_folder = cwd:match("([^/]+)$")
     require('mini.sessions').write(last_folder)
 end, { noremap = true, silent = true, desc = 'Save Session' })
-keymap("n", "<leader>sf", function() require('mini.sessions').select() end, { noremap = true, silent = true, desc = 'Load Session' })
+keymap("n", "<leader>sf", function() require('mini.sessions').select() end,
+    { noremap = true, silent = true, desc = 'Load Session' })
 
 -- ╔═══════════════════════╗
 -- ║    Editing Keymaps    ║
