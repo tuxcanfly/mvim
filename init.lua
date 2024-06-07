@@ -384,6 +384,8 @@ later(function()
     require('lspconfig').pyright.setup {}
     require('lspconfig').ruff.setup {}
     require('lspconfig').ruff_lsp.setup {}
+    require('lspconfig').cssls.setup {}
+    require('lspconfig').bashls.setup {}
     require('lspconfig').lua_ls.setup {
         settings = {
             Lua = {
@@ -429,6 +431,13 @@ later(function()
         highlight = { enable = true, disable = { 'ini' } },
         indent = { enable = true }
     })
+end)
+
+later(function()
+    add({
+        source = 'ibhagwan/fzf-lua'
+    })
+    require('fzf-lua').setup({})
 end)
 
 require("autocmds")

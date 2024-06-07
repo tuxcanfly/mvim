@@ -46,11 +46,14 @@ keymap("", "ö", ":")
 -- ║    Find Keymaps    ║
 -- ╚════════════════════╝
 keymap("n", "<leader>fs", function() require('mini.pick').builtin.files() end, { noremap = true, silent = true, desc = 'Find File' })
+keymap("n", "<leader>fa", function() require('mini.pick').builtin.resume() end, { noremap = true, silent = true, desc = 'Find File' })
 keymap("n", "<leader>e", function() require('mini.files').open(vim.api.nvim_buf_get_name(0)) end,
     { noremap = true, silent = true, desc = 'Find Manualy' })
 keymap("n", "<leader><space>", function() require('mini.pick').builtin.buffers() end,
     { noremap = true, silent = true, desc = 'Find Buffer' })
-keymap("n", "<leader>fg", function() require('mini.pick').builtin.grep_live() end,
+keymap("n", "<leader>fG", function() require('mini.pick').builtin.grep_live() end,
+    { noremap = true, silent = true, desc = 'Find String' })
+keymap("n", "<leader>fg", function() require('fzf-lua').live_grep() end,
     { noremap = true, silent = true, desc = 'Find String' })
 keymap("n", "<leader>fwg", function()
         local wrd = vim.fn.expand("<cWORD>")
