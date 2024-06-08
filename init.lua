@@ -441,6 +441,4 @@ later(function()
 end)
 
 require("autocmds")
-require("filetypes")
-require("highlights")
 require("keybinds")
