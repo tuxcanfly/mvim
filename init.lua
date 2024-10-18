@@ -413,7 +413,7 @@ later(function()
     })
     require('mason').setup()
     require('mason-lspconfig').setup()
-    require('lspconfig').pyright.setup{}
+    require('lspconfig').pyright.setup {}
     require('lspconfig').clangd.setup {}
     require('lspconfig').gopls.setup {}
     require('lspconfig').rust_analyzer.setup {}
@@ -453,6 +453,19 @@ later(function()
     require('lspconfig').pyright.setup {}
 end)
 
+--- Returns true if the file is considered a big file,
+--- according to the criteria defined in `vim.g.big_file`.
+--- @param bufnr number|nil buffer number. 0 by default, which means current buf.
+--- @return boolean is_big_file true or false.
+function is_big_file(bufnr)
+    if bufnr == nil then bufnr = 0 end
+    local filesize = vim.fn.getfsize(vim.api.nvim_buf_get_name(bufnr))
+    local nlines = vim.api.nvim_buf_line_count(bufnr)
+    local is_big_file = (filesize > vim.g.big_file.size)
+        or (nlines > vim.g.big_file.lines)
+    return is_big_file
+end
+
 later(function()
     add({
         source = 'nvim-treesitter/nvim-treesitter'
@@ -460,7 +473,15 @@ later(function()
     require('nvim-treesitter.configs').setup({
         ensure_installed = { 'lua', 'yaml' },
         auto_install = true,
-        highlight = { enable = true, disable = { 'ini' } },
+        highlight = {
+            enable = true,
+            disable = function(_, bufnr) return is_big_file(bufnr) end,
+        },
+        matchup = {
+            enable = true,
+            enable_quotes = true,
+            disable = function(_, bufnr) return is_big_file(bufnr) end,
+        },
         indent = { enable = true }
     })
 end)
