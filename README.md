@@ -2,8 +2,8 @@
 
 This is my NeoVim Configuration based entirely on [mini.nvim](https://github.com/echasnovski/mini.nvim)
 
-![Dashboard](mvim-dashboard.png)
-![Code](mvim.png)
+![Dashboard](mvim-dashboard-new.png)
+![Code](mvim-new.png)
 
 ## Why?
 Mostly because it's a single plugin with most functionality i need. So i can easily scp this to Servers without Internet Connection and still have my entire NeoVim Setup.
@@ -22,18 +22,15 @@ I use mini.hipatterns to hide Passwords from files. This helps when screensharin
 in my init.lua and add/remove patterns you don't need. Else this could lead to code being hidden.
 
 ### LSP Configuration
-I do provide a minimal LSP Setup. This is enough for my personal use but can be extended.
-The basic gist is, that you need to manually install your prefered LSPs through Mason and then add `require('lspconfig').yourlsp.setup {}` to init.lua
-I'll add a more detailed description later.
+My LSP Configuration has been stripped from this Repo.
+For my Setup, i include a "work.lua" File at the end of ini.lua. Feel free to also create one for your additional Pluins, or add them to the init file.
 
 ## Colorschemes
 Mini.nvim provides three different option to set up a colorscheme:
 - mini.colors
 - mini.hues
 - mini.base16
-Per default we use mini.base16 with our own colorscheme, inspired by the emacs modus themes by protesilaos.
-It should be noted though, that the dev of mini.base16 feels like it doesn't do highlighting as well as neovim could, as it closely follows the base16 specification. You can change the theme to randomhue
-or manually configure mini.hues for a more coherent look.
+We currently load the `randomhue` theme on startup, which is based on mini.hues. If you want a specific colorscheme, and not a random one at start, configure it in the init file by uncommenting the mini.hues Block.
 
 ### mini.hues
 This creates a colorscheme based on a background and foreground color. Alternatively it provides a "randomhues" colorscheme that randomizes the look with each call.
@@ -45,9 +42,8 @@ You can uncomment this in `init.lua`, if you want to use it. It's set up with a 
 This is also used to provide the themes in the "colors/" folder. If you want more than one theme, you can copy one of those and insert your own colors. This is also the way to get dark/light mode of the same theme.
 
 ## How Sessions Work
-For now, you need to manualy create a Session first. So, launch MVIM, type `:lua MiniSessions.write('Sessionname')`
+For now, you need to manualy create a Session first. You can start by editing a File and use `<SPC> s w` to create a new Session. It will automatically be named after PWD. Alternatively, type `:lua MiniSessions.write('Sessionname')` to create a session with a specific name.
 After that you can start editing and using MVIM like you normaly would. On Quitting MVIM, the Session is saved. It'll show up on the Dashboard and you can get a Session selection with `<Leader>sf`.
-I plan on updating the keybinds to something that automatically infers the session name from cwd.
 
 ## Unique things
 Since this is my personal Configuration, there might be things that work differently from other distributions. I'm not going over keybinds mostly, as you can discover them through mini.clues (just press space, it shows up on the bottom right).

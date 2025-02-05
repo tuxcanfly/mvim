@@ -1,95 +1,85 @@
--- Clone 'mini.nvim' manually in a way that it gets managed by 'mini.deps'
-local path_package = vim.fn.stdpath('data') .. '/site/'
-local mini_path = path_package .. 'pack/deps/start/mini.nvim'
-if not vim.loop.fs_stat(mini_path) then
+--          ╔═════════════════════════════════════════════════════════╗
+--          ║                          MVIM                           ║
+--          ╚═════════════════════════════════════════════════════════╝
+
+--  ─( mini.nvim )──────────────────────────────────────────────────────
+--          ┌─────────────────────────────────────────────────────────┐
+--                Clone 'mini.nvim manually in a way that it gets
+--                            managed by 'mini.deps'
+--          └─────────────────────────────────────────────────────────┘
+
+local path_package = vim.fn.stdpath("data") .. "/site/"
+local mini_path = path_package .. "pack/deps/start/mini.nvim"
+if not vim.uv.fs_stat(mini_path) then
     vim.cmd('echo "Installing `mini.nvim`" | redraw')
     local clone_cmd = {
-        'git', 'clone', '--filter=blob:none',
-        'https://github.com/echasnovski/mini.nvim', mini_path
+        "git",
+        "clone",
+        "--filter=blob:none",
+        "https://github.com/echasnovski/mini.nvim",
+        mini_path,
     }
     vim.fn.system(clone_cmd)
-    vim.cmd('packadd mini.nvim | helptags ALL')
+    vim.cmd("packadd mini.nvim | helptags ALL")
     vim.cmd('echo "Installed `mini.nvim`" | redraw')
 end
 
--- Set up 'mini.deps' (customize to your liking)
-require('mini.deps').setup({ path = { package = path_package } })
+--  ─( Set up 'mini.deps' )─────────────────────────────────────────────
+require("mini.deps").setup({ path = { package = path_package } })
 
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 
+--          ╭─────────────────────────────────────────────────────────╮
+--          │                     Neovim Options                      │
+--          ╰─────────────────────────────────────────────────────────╯
 now(function()
-    vim.g.mapleader      = "\\"
+    vim.g.mapleader      = '\\'
     vim.o.backup         = false
-    vim.o.writebackup    = false
-    vim.o.undofile       = true
-    vim.o.mouse          = 'a'
-    vim.o.cursorline     = true
-    vim.o.cursorlineopt  = "number"
-    vim.o.foldmethod     = "indent"
-    vim.o.foldexpr       = "v:lua.vim.treesitter.foldexpr()"
-    vim.o.foldlevel      = 99
+    vim.o.number         = true
+    vim.o.relativenumber = true
     vim.o.laststatus     = 2
     vim.o.list           = true
-    vim.o.ruler          = false
-    vim.o.signcolumn     = 'yes'
-    vim.o.splitbelow     = true
-    vim.o.splitright     = true
-    vim.o.termguicolors  = true
     vim.o.background     = 'light'
     vim.o.listchars      = table.concat({ 'extends:…', 'nbsp:␣', 'precedes:…', 'tab:> ' }, ',')
-    vim.o.fillchars      = table.concat(
-        { 'eob: ', 'fold:╌', 'horiz:═', 'horizdown:╦', 'horizup:╩', 'vert:║', 'verthoriz:╬', 'vertleft:╣', 'vertright:╠' },
-        ','
-    )
-    vim.o.smartindent    = true
     vim.o.autoindent     = true
-    vim.o.formatoptions  = 'rqnl1j'
     vim.o.shiftwidth     = 4
     vim.o.tabstop        = 4
     vim.o.expandtab      = true
-    vim.o.number         = true
-    vim.o.relativenumber = false
-    vim.o.ignorecase     = true
-    vim.o.incsearch      = true
-    vim.o.inccommand     = "split"
-    vim.o.infercase      = true
     vim.o.scrolloff      = 10
     vim.o.clipboard      = "unnamed,unnamedplus"
-    vim.o.spelllang      = 'en'
-    vim.o.spelloptions   = 'camel'
-    vim.o.swapfile       = false
-    vim.opt.complete:append('kspell')
-    vim.opt.iskeyword:append('-')
+    vim.o.cursorline     = true
     -- vim.opt.statuscolumn = '%=%{v:lnum}│%{v:relnum}'
+    vim.opt.iskeyword:append('-')
+    vim.o.spelllang    = 'en'
+    vim.o.spelloptions = 'camel'
+    vim.opt.complete:append('kspell')
+    vim.opt.swapfile = false
 
 
     vim.cmd('filetype plugin indent on')
     vim.cmd('colorscheme catppuccin')
 end)
 
-if vim.g.neovide then
-    vim.o.guifont = "FiraCode Nerd Font:h10"
-end
-
-later(function() require('mini.ai').setup() end)
-later(function() require('mini.align').setup() end)
 later(function()
-    -- This is needed for mini.animate to work with mouse scrolling
-    vim.opt.mousescroll = 'ver:1,hor:1'
-    local animate = require('mini.animate')
-    animate.setup {
+    require("mini.align").setup()
+end)
+later(function()
+    local animate = require("mini.animate")
+    animate.setup({
         scroll = {
             -- Disable Scroll Animations, as the can interfer with mouse Scrolling
             enable = true,
         },
         cursor = {
-            timing = animate.gen_timing.cubic({ duration = 50, unit = 'total' })
+            timing = animate.gen_timing.cubic({ duration = 50, unit = "total" }),
         },
-    }
+    })
 end)
--- Disabled Here. This is called directly from our Colorscheme in the colors/ folder
--- You can enable this by uncommenting.
--- We provide a basic Catppuccin Colorscheme here
+--          ┌─────────────────────────────────────────────────────────┐
+--                Disabled Here. We use randomhue as the colorscheme
+--                     You can enable this by uncommenting.
+--                We provide a basic Catppuccin Colorscheme here
+--          └─────────────────────────────────────────────────────────┘
 -- later(function()
 --     require('mini.base16').setup({
 --         palette = {
@@ -113,11 +103,11 @@ end)
 --     })
 -- end)
 later(function()
-    require('mini.basics').setup({
+    require("mini.basics").setup({
         options = {
             basic = true,
             extra_ui = true,
-            win_borders = 'bold',
+            win_borders = "bold",
         },
         mappings = {
             basic = true,
@@ -126,63 +116,68 @@ later(function()
         autocommands = {
             basic = true,
             relnum_in_visual_mode = true,
-        }
+        },
     })
 end)
-later(function() require('mini.bracketed').setup() end)
-later(function() require('mini.bufremove').setup() end)
 later(function()
-    require('mini.clue').setup({
+    require("mini.bracketed").setup()
+end)
+later(function()
+    require("mini.bufremove").setup()
+end)
+later(function()
+    require("mini.clue").setup({
         triggers = {
             -- Leader triggers
-            { mode = 'n', keys = '<Leader>' },
-            { mode = 'x', keys = '<Leader>' },
+            { mode = "n", keys = "<Leader>" },
+            { mode = "x", keys = "<Leader>" },
 
-            { mode = 'n', keys = '\\' },
+            { mode = "n", keys = "\\" },
 
             -- Built-in completion
-            { mode = 'i', keys = '<C-x>' },
+            { mode = "i", keys = "<C-x>" },
 
             -- `g` key
-            { mode = 'n', keys = 'g' },
-            { mode = 'x', keys = 'g' },
+            { mode = "n", keys = "g" },
+            { mode = "x", keys = "g" },
 
             -- Marks
-            { mode = 'n', keys = "'" },
-            { mode = 'n', keys = '`' },
-            { mode = 'x', keys = "'" },
-            { mode = 'x', keys = '`' },
+            { mode = "n", keys = "'" },
+            { mode = "n", keys = "`" },
+            { mode = "x", keys = "'" },
+            { mode = "x", keys = "`" },
 
             -- Registers
-            { mode = 'n', keys = '"' },
-            { mode = 'x', keys = '"' },
-            { mode = 'i', keys = '<C-r>' },
-            { mode = 'c', keys = '<C-r>' },
+            { mode = "n", keys = '"' },
+            { mode = "x", keys = '"' },
+            { mode = "i", keys = "<C-r>" },
+            { mode = "c", keys = "<C-r>" },
 
             -- Window commands
-            { mode = 'n', keys = '<C-w>' },
+            { mode = "n", keys = "<C-w>" },
 
             -- `z` key
-            { mode = 'n', keys = 'z' },
-            { mode = 'x', keys = 'z' },
+            { mode = "n", keys = "z" },
+            { mode = "x", keys = "z" },
         },
 
         clues = {
-            { mode = 'n', keys = '<Leader>b', desc = ' Buffer' },
-            { mode = 'n', keys = '<Leader>f', desc = ' Find' },
-            { mode = 'n', keys = '<Leader>g', desc = '󰊢 Git' },
-            { mode = 'n', keys = '<Leader>i', desc = '󰏪 Insert' },
-            { mode = 'n', keys = '<Leader>l', desc = '󰘦 LSP' },
-            { mode = 'n', keys = '<Leader>q', desc = ' NVim' },
-            { mode = 'n', keys = '<Leader>s', desc = '󰆓 Session' },
-            { mode = 'n', keys = '<Leader>u', desc = '󰔃 UI' },
-            { mode = 'n', keys = '<Leader>w', desc = ' Window' },
-            function() MiniClue.gen_clues.g() end,
-            function() MiniClue.gen_clues.builtin_completion() end,
-            function() MiniClue.gen_clues.marks() end,
-            function() MiniClue.gen_clues.registers() end,
-            function() MiniClue.gen_clues.windows() end,
-            function() MiniClue.gen_clues.z() end,
+            { mode = "n", keys = "<Leader>b", desc = " Buffer" },
+            { mode = "n", keys = "<Leader>f", desc = " Find" },
+            { mode = "n", keys = "<Leader>g", desc = "󰊢 Git" },
+            { mode = "n", keys = "<Leader>i", desc = "󰏪 Insert" },
+            { mode = "n", keys = "<Leader>l", desc = "󰘦 LSP" },
+            { mode = "n", keys = "<Leader>m", desc = " Mini" },
+            { mode = "n", keys = "<Leader>q", desc = " NVim" },
+            { mode = "n", keys = "<Leader>s", desc = "󰆓 Session" },
+            { mode = "n", keys = "<Leader>u", desc = "󰔃 UI" },
+            { mode = "n", keys = "<Leader>w", desc = " Window" },
+            require("mini.clue").gen_clues.g(),
+            require("mini.clue").gen_clues.builtin_completion(),
+            require("mini.clue").gen_clues.marks(),
+            require("mini.clue").gen_clues.registers(),
+            require("mini.clue").gen_clues.windows(),
+            require("mini.clue").gen_clues.z(),
         },
         window = {
             config = { anchor = 'NE', row = 'auto', col = 'auto' },
@@ -190,12 +185,41 @@ later(function()
         }
     })
 end)
--- later(function() require('mini.colors').setup() end)
-later(function() require('mini.comment').setup() end)
+later(function() require('mini.colors').setup() end)
+later(function() require('mini.icons').setup() end)
 later(function()
-    require('mini.completion').setup({
+    -- Define custom signs for diagnostics and dap
+    vim.fn.sign_define("DiagnosticSignError", { text = "", texthl = "DiagnosticSignError", linehl = "", numhl = "" })
+    vim.fn.sign_define("DiagnosticSignHint", { text = "", texthl = "DiagnosticSignHint", linehl = "", numhl = "" })
+    vim.fn.sign_define("DiagnosticSignInfo", { text = "", texthl = "DiagnosticSignInfo", linehl = "", numhl = "" })
+    vim.fn.sign_define("DiagnosticSignWarn", { text = "", texthl = "DiagnosticSignWarn", linehl = "", numhl = "" })
+    vim.fn.sign_define("DiagnosticSignOk", { text = "✓", texthl = "DiagnosticSignOk", linehl = "", numhl = "" })
+    vim.fn.sign_define("DapBreakpoint", { text = "󰙧", texthl = "DiagnosticSignOk", linehl = "", numhl = "" })
+    -- Set border for lsp floating window
+    local border = {
+        { "╭", "FloatBorder" },
+        { "─", "FloatBorder" },
+        { "╮", "FloatBorder" },
+        { "│", "FloatBorder" },
+        { "╯", "FloatBorder" },
+        { "─", "FloatBorder" },
+        { "╰", "FloatBorder" },
+        { "│", "FloatBorder" },
+    }
+    local original_util_open_floating_preview = vim.lsp.util.open_floating_preview
+    function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
+        opts = opts or {}
+        opts.border = opts.border or border
+        return original_util_open_floating_preview(contents, syntax, opts, ...)
+    end
+end)
+later(function()
+    require("mini.comment").setup()
+end)
+later(function()
+    require("mini.completion").setup({
         mappings = {
-            go_in = '<RET>',
+            go_in = "<RET>",
         },
         window = {
             info = { border = 'rounded' },
@@ -206,27 +230,50 @@ later(function()
         },
     })
 end)
-later(function() require('mini.cursorword').setup() end)
 later(function()
-    require('mini.diff').setup({
+    require("mini.cursorword").setup()
+end)
+later(function()
+    require("mini.diff").setup({
         view = {
-            style = 'sign',
-            signs = { add = '█', change = '▒', delete = '' }
-        }
+            style = "sign",
+            signs = { add = "█", change = "▒", delete = "" },
+        },
     })
 end)
 later(function() require('mini.doc').setup() end)
 later(function() require('mini.extra').setup() end)
 later(function() require('mini.git').setup() end)
 later(function()
-    require('mini.files').setup({
+    require("mini.doc").setup()
+end)
+later(function()
+    require("mini.extra").setup()
+end)
+later(function()
+    require("mini.files").setup({
+        mappings = {
+            close = '<ESC>',
+            go_in_plus = "<enter>",
+        },
         windows = {
             preview = true,
+            border = "double",
             width_preview = 80,
         },
-        mappings = {
-            go_in_plus = "<enter>",
-        }
+    })
+end)
+later(function()
+    local gen_loader = require('mini.snippets').gen_loader
+    require('mini.snippets').setup({
+        snippets = {
+            -- Load custom file with global snippets first (adjust for Windows)
+            gen_loader.from_file('~/.config/nvim/snippets/global.json'),
+
+            -- Load snippets based on current language by reading files from
+            -- "snippets/" subdirectories from 'runtimepath' directories.
+            gen_loader.from_lang(),
+        },
     })
 end)
 later(function() require('mini.fuzzy').setup() end)
@@ -235,10 +282,10 @@ now(function()
     local hipatterns = require('mini.hipatterns')
 
     local censor_extmark_opts = function(_, match, _)
-        local mask = string.rep('*', vim.fn.strchars(match))
+        local mask = string.rep("*", vim.fn.strchars(match))
         return {
-            virt_text = { { mask, 'Comment' } },
-            virt_text_pos = 'overlay',
+            virt_text = { { mask, "Comment" } },
+            virt_text_pos = "overlay",
             priority = 200,
             right_gravity = false,
         }
@@ -246,45 +293,29 @@ now(function()
 
     local password_table = {
         pattern = {
-            'password: ()%S+()',
-            'password_usr: ()%S+()',
-            '.*_pw: ()%S+()',
-            'password_.*: ()%S+()',
-            'gpg_pass: ()%S+()',
+            "password: ()%S+()",
+            "password_usr: ()%S+()",
+            "_pw: ()%S+()",
+            "password_asgard_read: ()%S+()",
+            "password_elara_admin: ()%S+()",
+            "gpg_pass: ()%S+()",
+            "passwd: ()%S+()",
+            "secret: ()%S+()",
         },
-        group = '',
-        extmark_opts = censor_extmark_opts
-    }
-    -- TODO Make the "mask" Text a variale based on the match
-    local mattern_extmark_opts = function(_, match, _)
-        local mask = 'Rollout new Backup'
-        return {
-            virt_text = { { mask, 'FoldColumn' } },
-            virt_text_pos = 'eol',
-            priority = 199,
-            right_gravity = true,
-        }
-    end
-
-    local mattern_table = {
-        pattern = {
-            '.*backup_path:'
-        },
-        group = '',
-        extmark_opts = mattern_extmark_opts
+        group = "",
+        extmark_opts = censor_extmark_opts,
     }
 
     hipatterns.setup({
         highlighters = {
             -- Highlight standalone 'FIXME', 'HACK', 'TODO', 'NOTE'
-            fixme     = { pattern = '%f[%w]()FIXME()%f[%W]', group = 'MiniHipatternsFixme' },
-            hack      = { pattern = '%f[%w]()HACK()%f[%W]', group = 'MiniHipatternsHack' },
-            todo      = { pattern = '%f[%w]()TODO()%f[%W]', group = 'MiniHipatternsTodo' },
-            note      = { pattern = '%f[%w]()NOTE()%f[%W]', group = 'MiniHipatternsNote' },
+            fixme = { pattern = "%f[%w]()FIXME()%f[%W]", group = "MiniHipatternsFixme" },
+            hack = { pattern = "%f[%w]()HACK()%f[%W]", group = "MiniHipatternsHack" },
+            todo = { pattern = "%f[%w]()TODO()%f[%W]", group = "MiniHipatternsTodo" },
+            note = { pattern = "%f[%w]()NOTE()%f[%W]", group = "MiniHipatternsNote" },
 
             -- Cloaking Passwords
-            pw        = password_table,
-            mattern   = mattern_table,
+            pw = password_table,
 
             -- Highlight hex color strings (`#rrggbb`) using that color
             hex_color = hipatterns.gen_highlighter.hex_color(),
@@ -297,8 +328,8 @@ now(function()
         else
             hipatterns.config.highlighters.pw = {}
         end
-        vim.cmd('edit')
-    end, { desc = 'Toggle Password Cloaking' })
+        vim.cmd("edit")
+    end, { desc = "Toggle Password Cloaking" })
 end)
 -- We disable this, as we use our own Colorscheme through mini.colors
 -- You can enable this by uncommenting
@@ -313,75 +344,134 @@ end)
 -- end)
 
 later(function()
-    require('mini.indentscope').setup({
+    require("mini.indentscope").setup({
         draw = {
-            animation = function() return 1 end,
+            animation = function()
+                return 1
+            end,
         },
-        symbol = "│"
+        symbol = "│",
     })
 end)
-later(function() require('mini.jump').setup() end)
-later(function() require('mini.jump2d').setup() end)
-later(function() require('mini.map').setup() end)
-later(function() require('mini.misc').setup() end)
-later(function() require('mini.move').setup({}) end)
 later(function()
-    -- We took this from echasnovski's personal configuration
-    -- https://github.com/echasnovski/nvim/blob/master/init.lua
+    require("mini.jump").setup()
+end)
+later(function()
+    require("mini.jump2d").setup()
+end)
+later(function()
+    require("mini.map").setup()
+end)
+later(function()
+    require("mini.misc").setup()
+end)
+later(function()
+    require("mini.move").setup({
+        mappings = {
+            -- Move visual selection in Visual mode. Defaults are Alt (Meta) + hjkl.
+            left = '<M-S-h>',
+            right = '<M-S-l>',
+            down = '<M-S-j>',
+            up = '<M-S-k>',
+
+            -- Move current line in Normal mode
+            line_left = '<M-S-h>',
+            line_right = '<M-S-l>',
+            line_down = '<M-S-j>',
+            line_up = '<M-S-k>',
+        },
+    }
+    )
+end)
+later(function()
+    --          ┌─────────────────────────────────────────────────────────┐
+    --            We took this from echasnovski's personal configuration
+    --           https://github.com/echasnovski/nvim/blob/master/init.lua
+    --          └─────────────────────────────────────────────────────────┘
     local filterout_lua_diagnosing = function(notif_arr)
-        local not_diagnosing = function(notif) return not vim.startswith(notif.msg, 'lua_ls: Diagnosing') end
+        local not_diagnosing = function(notif)
+            return not vim.startswith(notif.msg, "lua_ls: Diagnosing")
+        end
         notif_arr = vim.tbl_filter(not_diagnosing, notif_arr)
         return MiniNotify.default_sort(notif_arr)
     end
-    require('mini.notify').setup({
+    require("mini.notify").setup({
         content = { sort = filterout_lua_diagnosing },
-        window = { config = { border = 'double' } },
+        window = { config = { border = "double" } },
+        -- Notifications about LSP progress
+        lsp_progress = {
+            -- Whether to enable showing
+            enable = false,
+
+            -- Duration (in ms) of how long last message should be shown
+            duration_last = 200,
+        },
     })
     vim.notify = MiniNotify.make_notify()
     print = MiniNotify.make_notify()
 end)
-later(function() require('mini.operators').setup() end)
-later(function() require('mini.pairs').setup() end)
 later(function()
     local win_config = function()
-        height = math.floor(0.618 * vim.o.lines)
-        width = math.floor(0.618 * vim.o.columns)
+        local height = math.floor(0.618 * vim.o.lines)
+        local width = math.floor(0.4 * vim.o.columns)
         return {
-            anchor = 'NW',
+            anchor = "NW",
             height = height,
             width = width,
-            border = 'rounded',
+            border = "double",
             row = math.floor(0.5 * (vim.o.lines - height)),
             col = math.floor(0.5 * (vim.o.columns - width)),
         }
     end
-    require('mini.pick').setup({
+    require("mini.pick").setup({
         mappings = {
-            choose_in_vsplit = '<C-CR>',
+            choose_in_vsplit = "<C-CR>",
         },
         options = {
-            use_cache = true
+            use_cache = true,
         },
         window = {
-            config = win_config
-        }
+            config = win_config,
+        },
     })
     vim.ui.select = MiniPick.ui_select
 end)
 now(function()
-    require('mini.sessions').setup({
-        autowrite = true
+    require("mini.sessions").setup({
+        autowrite = true,
     })
 end)
-later(function() require('mini.splitjoin').setup() end)
+later(function()
+    require("mini.splitjoin").setup()
+end)
+later(function()
+    local gen_loader = require('mini.snippets').gen_loader
+    require('mini.snippets').setup({
+        snippets = {
+            -- Load custom file with global snippets first (adjust for Windows)
+            gen_loader.from_file('~/.config/nvim/snippets/global.json'),
+
+            -- Load snippets based on current language by reading files from
+            -- "snippets/" subdirectories from 'runtimepath' directories.
+            gen_loader.from_lang(),
+        },
+    })
+end)
 now(function()
-    require('mini.starter').setup({
+    Mvim_starter_custom = function()
+        return {
+            { name = "Recent Files", action = function() require("mini.extra").pickers.oldfiles() end, section = "Search" },
+            { name = "Session",      action = function() require("mini.sessions").select() end,        section = "Search" },
+        }
+    end
+    require("mini.starter").setup({
         autoopen = true,
         items = {
-            require('mini.starter').sections.builtin_actions(),
-            require('mini.starter').sections.recent_files(5, false),
-            require('mini.starter').sections.recent_files(5, true),
-            require('mini.starter').sections.sessions(5, true),
+            -- require("mini.starter").sections.builtin_actions(),
+            Mvim_starter_custom(),
+            require("mini.starter").sections.recent_files(5, false, false),
+            require("mini.starter").sections.recent_files(5, true, false),
+            require("mini.starter").sections.sessions(5, true),
         },
         header = [[
             ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗
@@ -394,16 +484,13 @@ now(function()
     })
 end)
 later(function()
-    require('mini.statusline').setup({
-        use_icons = true,
-    })
+    require("mini.statusline").setup()
 end)
-later(function() require('mini.surround').setup() end)
-later(function() require('mini.tabline').setup() end)
-later(function() require('mini.trailspace').setup() end)
-later(function() require('mini.visits').setup() end)
-
 later(function()
+    add({
+        source = 'mrcjkb/rustaceanvim',
+        version = '^5'
+    })
     add({
         source = 'neovim/nvim-lspconfig',
         depends = {
@@ -416,7 +503,6 @@ later(function()
     require('lspconfig').pyright.setup {}
     require('lspconfig').clangd.setup {}
     require('lspconfig').gopls.setup {}
-    require('lspconfig').rust_analyzer.setup {}
     require('lspconfig').lua_ls.setup {
         settings = {
             Lua = {
@@ -452,20 +538,6 @@ later(function()
     require('lspconfig').yamlls.setup {}
     require('lspconfig').pyright.setup {}
 end)
-
---- Returns true if the file is considered a big file,
---- according to the criteria defined in `vim.g.big_file`.
---- @param bufnr number|nil buffer number. 0 by default, which means current buf.
---- @return boolean is_big_file true or false.
-function is_big_file(bufnr)
-    if bufnr == nil then bufnr = 0 end
-    local filesize = vim.fn.getfsize(vim.api.nvim_buf_get_name(bufnr))
-    local nlines = vim.api.nvim_buf_line_count(bufnr)
-    local is_big_file = (filesize > vim.g.big_file.size)
-        or (nlines > vim.g.big_file.lines)
-    return is_big_file
-end
-
 later(function()
     add({
         source = 'nvim-treesitter/nvim-treesitter'
@@ -473,19 +545,10 @@ later(function()
     require('nvim-treesitter.configs').setup({
         ensure_installed = { 'lua', 'yaml' },
         auto_install = true,
-        highlight = {
-            enable = true,
-            disable = function(_, bufnr) return is_big_file(bufnr) end,
-        },
-        matchup = {
-            enable = true,
-            enable_quotes = true,
-            disable = function(_, bufnr) return is_big_file(bufnr) end,
-        },
+        highlight = { enable = true, disable = { 'ini' } },
         indent = { enable = true }
     })
 end)
-
 later(function()
     add({
         source = 'supermaven-inc/supermaven-nvim',
@@ -508,3 +571,5 @@ end)
 
 require("autocmds")
 require("keybinds")
+require("box")
+require("progress")
