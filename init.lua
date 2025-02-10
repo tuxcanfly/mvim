@@ -54,7 +54,7 @@ now(function()
     vim.o.spelloptions = 'camel'
     vim.opt.complete:append('kspell')
     vim.opt.swapfile = false
-
+    vim.opt.diffopt = "filler,internal,closeoff,algorithm:histogram,context:5,linematch:60"
 
     vim.cmd('filetype plugin indent on')
     vim.cmd('colorscheme catppuccin')
