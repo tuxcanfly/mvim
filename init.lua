@@ -491,6 +491,7 @@ later(function()
         source = 'mrcjkb/rustaceanvim',
         version = '^5'
     })
+    add({ source = 'j-hui/fidget.nvim' })
     add({
         source = 'neovim/nvim-lspconfig',
         depends = {
@@ -498,8 +499,18 @@ later(function()
             'williamboman/mason-lspconfig.nvim'
         }
     })
+    add({
+        source = 'jay-babu/mason-nvim-dap.nvim',
+        depends = {
+            'williamboman/mason.nvim',
+            'mfussenegger/nvim-dap',
+            'igorlfs/nvim-dap-view'
+        }
+    })
     require('mason').setup()
     require('mason-lspconfig').setup()
+    require('mason-nvim-dap').setup()
+    require('fidget').setup()
     require('lspconfig').pyright.setup {}
     require('lspconfig').clangd.setup {}
     require('lspconfig').gopls.setup {}
@@ -570,6 +581,5 @@ later(function()
 end)
 
 require("autocmds")
-require("keybinds")
 require("box")
-require("progress")
+require("keybinds")
