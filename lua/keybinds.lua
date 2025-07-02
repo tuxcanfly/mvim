@@ -49,7 +49,11 @@ keymap("i", "<S-Insert>", "<C-R>+", { desc = 'Remap Paste for CopyQ' })
 -- ╔════════════════════╗
 -- ║    Find Keymaps    ║
 -- ╚════════════════════╝
-keymap("n", "<leader>e", function() require('mini.files').open(vim.api.nvim_buf_get_name(0)) end,
+keymap("n", "<leader>e", function()
+        local buf_name = vim.api.nvim_buf_get_name(0)
+        local path = vim.fn.filereadable(buf_name) == 1 and buf_name or vim.fn.getcwd()
+        require('mini.files').open(path)
+    end,
     { noremap = true, silent = true, desc = 'Find Manually' })
 keymap("n", "<leader><space>", function() require('mini.pick').builtin.buffers() end,
     { noremap = true, silent = true, desc = 'Find Buffer' })
