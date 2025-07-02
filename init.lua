@@ -511,43 +511,20 @@ later(function()
     require('mason-lspconfig').setup()
     require('mason-nvim-dap').setup()
     require('fidget').setup()
-    require('lspconfig').pyright.setup {}
-    require('lspconfig').clangd.setup {}
-    require('lspconfig').gopls.setup {}
-    require('lspconfig').lua_ls.setup {
-        settings = {
-            Lua = {
-                diagnostics = {
-                    disable = { "lowercase-global", "undefined-global" }
-                },
-            }
-        }
-    }
-    require('lspconfig').ansiblels.setup {
-        settings = {
-            ansible = {
-                python = {
-                    interpreterPath = 'python',
-                },
-                ansible = {
-                    path = 'ansible',
-                },
-                executionEnvironment = {
-                    enabled = false,
-                },
-                validation = {
-                    enabled = true,
-                    lint = {
-                        enabled = true,
-                        path = 'ansible-lint',
-                        arguments = '-c /home/dosa/.config/ansible-lint.yml'
-                    },
-                },
-            },
-        },
-    }
-    require('lspconfig').yamlls.setup {}
-    require('lspconfig').pyright.setup {}
+    -- require('lspconfig').pyright.setup {}
+    -- require('lspconfig').clangd.setup {}
+    -- require('lspconfig').gopls.setup {}
+    -- require('lspconfig').lua_ls.setup {
+    --     settings = {
+    --         Lua = {
+    --             diagnostics = {
+    --                 disable = { "lowercase-global", "undefined-global" }
+    --             },
+    --         }
+    --     }
+    -- }
+    -- require('lspconfig').yamlls.setup {}
+    -- require('lspconfig').pyright.setup {}
 end)
 later(function()
     add({
