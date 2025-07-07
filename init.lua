@@ -507,6 +507,9 @@ later(function()
             'igorlfs/nvim-dap-view'
         }
     })
+    add({
+        source = 'mrjones2014/smart-splits.nvim'
+    })
     require('mason').setup()
     require('mason-lspconfig').setup()
     require('mason-nvim-dap').setup()
