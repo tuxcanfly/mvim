@@ -559,7 +559,7 @@ later(function()
             { "<leader>ar", "<cmd>ClaudeCode --resume<cr>",   desc = "Resume Claude" },
             { "<leader>aC", "<cmd>ClaudeCode --continue<cr>", desc = "Continue Claude" },
             { "<leader>ab", "<cmd>ClaudeCodeAdd %<cr>",       desc = "Add current buffer" },
-            { "<leader>as", "<cmd>ClaudeCodeSend<cr>",        mode = "v",                 desc = "Send to Claude" },
+            { "<leader>as", "<cmd>ClaudeCodeSend<cr>",        desc = "Send to Claude", mode = "v"},
             {
                 "<leader>as",
                 "<cmd>ClaudeCodeTreeAdd<cr>",
