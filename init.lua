@@ -510,6 +510,10 @@ later(function()
     add({
         source = 'mrjones2014/smart-splits.nvim'
     })
+    add({
+        source = 'bngarren/checkmate.nvim'
+    })
+    require('checkmate').setup()
     require('mason').setup()
     require('mason-lspconfig').setup()
     require('mason-nvim-dap').setup()
